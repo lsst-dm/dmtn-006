@@ -1,26 +1,6 @@
 ..
-  Content of technical report.
-
   See http://docs.lsst.codes/en/latest/development/docs/rst_styleguide.html
   for a guide to reStructuredText writing.
-
-  Do not put the title, authors or other metadata in this document;
-  those are automatically added.
-
-  Use the following syntax for sections:
-
-  Sections
-  ========
-
-  and
-
-  Subsections
-  -----------
-
-  and
-
-  Subsubsections
-  ^^^^^^^^^^^^^^
 
   To add images, add the image file (png, svg or jpeg preferred) to the
   _static/ directory. The reST syntax for adding the image is
@@ -35,7 +15,6 @@
    See the README at https://github.com/lsst-sqre/lsst-report-bootstrap or
    this repo's README for more info.
 
-   Feel free to delete this instructional comment.
 
 :tocdepth: 1
 
@@ -43,18 +22,90 @@ Introduction
 ============
 
 Detections of image and processing artifacts in image differencing present a
-significant challenge to LSST's ability to recover faint moving objects.
+significant challenge to LSST's recovery of faint moving objects. To identify
+solar system objects, the moving objects pipeline must be able to link
+multiple detections of the same object over a time baseline of (XXX how long?)
+to measure a candidate orbit. This process involves a computationally-
+intensive testing many plausible combinations of sources in the difference
+images (referered to as "Dia sources" for "Difference Image Analysis") to
+distinguish which sets of detections ("tracks", or "tracklets"?) describe a
+physical orbit.
 
-Pan-STARRS.
+The longer this baseline grows between repeat detections of an object, the
+larger the area that must be searched grows. This may remain computationally
+tractable if the number of candidate detections that must be tested is small,
+but can quickly become infeasible if the density of candidates is large.
+Previous searches for solar system objects have found that the vast majority
+of their candidate detections are caused by imaging or processing artifacts,
+rather than real solar system objects. In the case of Pan-STARRS, the cadence
+had to be modified to include repeat visits of a field within a single night,
+shrinking the time baseline and thus the search space (CITE). The Dark Energy
+Survey, while mainly searching for transients rather than moving solar system
+objects, employed machine learning algorithms to exclude detections that were
+unlikely to be physical (CITE Kessler).
 
-Kessler Example.
+The goal of this study is to quantify the expected rate of false positive
+detections in LSST, using the LSST image differencing pipeline run on
+observations taken with Decam. This false positive rate can then be used in
+subsequent works to assess the recovery rates of solar system objects under
+differing candidate observing cadences. The Decam CCDs are reasonable analogs
+of the sensors that will be used in LSST, significantly more so than the Pan-
+STARRS orthogonal transfer arrays. Producing clean difference images is a
+serious software challenge. As described in several LSST reports (Becker et
+al. Winter 2013 report, CITES) and published works (Alard & Lupton, Zackay,
+etc), the convolution process required to match the point spread functions of
+the two images (PSFs) introduces correlated noise which complicates detection.
+Improved algorithms for image subtraction are still an active area of research
+(Zackay 2015). Our objective is to characterize the performance of the current
+pipeline with the understanding that it may be improved in the time leading up
+to the start of operations.
+
+XXX: Need to be quantitative about time baselines for recovery.
+
 
 Data and Pipeline Processing
 ============================
 
+The observations used in this work were part of a near earth object (NEO)
+search program conducted in 2013 (Program 2013A-724, PI: L. Allen). The data
+are publically available in the NOAO archive, and a table of the individual
+exposures used can be found in :ref:`Appendix A <appendix-a>`. These exposures
+are a small subset of the full observing program. The full set of exposures
+was divided into five bands in absolute Galactic latitude, a single field in
+each range was randomly chosen and all observations of that field were
+downloaded. The input to the LSST pipeline were "InstCal" files for which
+instrumental signature removal (ISR) had been applied by the NOAO Community
+Pipeline. This stage of processing is very instrument-specific and the LSST
+pipeline had only a limited ability to apply ISR to Decam images at the time.
+
+The LSST pipeline was used to background subtract the images, compute the PSF,
+and perform photometry (all conducted by ``processCcdDecam.py``). Astrometric
+calibration was provided by the Community Pipeline values; we did not re-fit
+the astrometry [#TPV]_. In each field one image was selected to serve as the
+"template" against which all other observations in that field would be
+differenced. This was done by ``imageDifference.py``, which computed the
+matching kernel, convolved and warped the template to match the non-template
+exposure and performed the subtraction. Existing default settings were used
+throughout. Source detection was performed at the :math:`5.5\sigma` level.
+Dipole fitting and PSF photometry was performed on all detections.
+
+A set of postage stamps showing Dia source detections are shown in :numref:`fig-diasource-mosaic`.
+
+.. figure:: /_static/diasource_mosaic_visit197367_ccd10_5.png
+    :name: fig-diasource-mosaic
+
+    Example postage stamps of Dia sources in visit 197367. For each triplet of
+    images, the left image is the template, the center image is the science
+    exposure, and the right image is the difference. Many of these result from
+    poor subtractions of bright stars, but many are in areas that appear
+    empty.
+
+.. [#TPV] We tested the processing both with and without the astrometric
+    distortion terms provided by the Community Pipeline and did not see a significant
+    difference in the numbers of Dia source detections.
 
 False Detections near Bright Stars
-==============================
+==================================
 
 .. figure:: /_static/sec3_star_dia_correlation.png
     :name: star_dia_correlation
@@ -78,17 +129,17 @@ Image Noise Analysis
     described in (XXX WHERE). The high latitude fields are much more
     consistent.
 
-Comparison of Direct Image Fluxes
----------------------------------
+Comparison of Direct Image Photometry
+-------------------------------------
 
 One check on the pipeline noise estimates can be made by taking two overlaping
 exposures, crossmatching the detected sources in each, and comparing the
 difference in the fluxes measured each time with the reported uncertainties on
-those fluxes. The reported uncertainties are derived from each exposure's
-variance plane, which is also used for computing the uncertainties on the
-difference images.
+those fluxes. This test is independent of any of image differencing. The
+reported uncertainties are derived from each exposure's variance plane, which
+is also used for computing the uncertainties on the difference images.
 
-Figure :ref:`fig-source-err-v197367` shows this analysis performed for a pair of
+:numref:`fig-source-err-v197367` shows this analysis performed for a pair of
 well-behaved fields at high latitude.
 
 .. figure:: /_static/sec4_source_err_v197367.png
@@ -110,8 +161,14 @@ well-behaved fields at high latitude.
 Conclusions
 ===========
 
+.. _appendix-a:
+
 Appendix A: Data used in this work
 ==================================
+
+XXX: Instcals
+
+XXX: Stack versions? Configuration settings.
 
 
 .. table:: Decam visits used in this analysis.
