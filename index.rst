@@ -86,10 +86,26 @@ the astrometry [#TPV]_. In each field one image was selected to serve as the
 differenced. This was done by ``imageDifference.py``, which computed the
 matching kernel, convolved and warped the template to match the non-template
 exposure and performed the subtraction. Existing default settings were used
-throughout. Source detection was performed at the :math:`5.5\sigma` level.
+throughout. Source detection was performed at the :math:`5.5\sigma` level [#5sigma]_.
 Dipole fitting and PSF photometry was performed on all detections.
 
-A set of postage stamps showing Dia source detections are shown in :numref:`fig-diasource-mosaic`.
+A set of postage stamps showing Dia source detections are shown in
+:numref:`fig-diasource-mosaic`. The appearance of these is quite varied. Some are
+clearly the result of poorly subtracted stars, and show both positive and
+negative artifacts. The dipole fitting code in the LSST pipeline attempts to
+fit both negative and positive components to a detection, and then flags
+sources as dipoles if the the absolute value of the flux in both components is
+similar (neither component holds more than 65% of the total flux). Detections
+where this flag is set have been marked "Dipole" on the left side of the
+postage stamps, and one can see that this successfully identifies many of the
+bright stars with failed subtractions.
+
+Many of the other detections show no apparent source at all in the original
+images, and the presence of a flux overdensity or underdensity is barely
+perceptable by eye. Some of these detections could simply be noise excursions
+that happen to exceede the :math:`5.5\sigma` detection threshold. However they
+could also be real detections of particularly faint objects, and thus it is
+critical to understand the origin of these detections.
 
 .. figure:: /_static/diasource_mosaic_visit197367_ccd10_5.png
     :name: fig-diasource-mosaic
@@ -100,12 +116,28 @@ A set of postage stamps showing Dia source detections are shown in :numref:`fig-
     poor subtractions of bright stars, but many are in areas that appear
     empty.
 
+
+
+
+.. figure:: /_static/sec4_dia_density.png
+    :name: dia_density
+
+    Density of dipole and non-dipole Dia sources. The low latitude fields have
+    Dia counts greatly above the top of the plot due to the noise issue
+    described in (XXX WHERE). The high latitude fields are much more
+    consistent.
+
 .. [#TPV] We tested the processing both with and without the astrometric
     distortion terms provided by the Community Pipeline and did not see a significant
     difference in the numbers of Dia source detections.
 
-False Detections near Bright Stars
-==================================
+.. [#5sigma] The LSST baseline is to detect at :math:`5.0\sigma`, but because
+    the number of false detections is such a steep function of this cutoff,
+    the default setting in the code at the time was :math:`5.5\sigma` to
+    limit detections. This setting will be updated to 5.0.
+
+Detections near Bright Stars
+=============================
 
 .. figure:: /_static/sec3_star_dia_correlation.png
     :name: star_dia_correlation
@@ -121,14 +153,6 @@ False Detections near Bright Stars
 Image Noise Analysis
 ====================
 
-.. figure:: /_static/sec4_dia_density.png
-    :name: dia_density
-
-    Density of dipole and non-dipole Dia sources. The low latitude fields have
-    Dia counts greatly above the top of the plot due to the noise issue
-    described in (XXX WHERE). The high latitude fields are much more
-    consistent.
-
 Comparison of Direct Image Photometry
 -------------------------------------
 
@@ -140,7 +164,11 @@ reported uncertainties are derived from each exposure's variance plane, which
 is also used for computing the uncertainties on the difference images.
 
 :numref:`fig-source-err-v197367` shows this analysis performed for a pair of
-well-behaved fields at high latitude.
+well-behaved fields at high latitude. The scatter in the measured fluxes is
+about 15% wider than the pipeline uncertainties report. While this is enough
+to account for ~300 detections at :math:`5.5\sigma` per square degree, that
+still falls fall short of the actual detection numbers we see in the high
+latitude images.
 
 .. figure:: /_static/sec4_source_err_v197367.png
     :name: fig-source-err-v197367
@@ -150,6 +178,12 @@ well-behaved fields at high latitude.
     reported uncertainties are correct, this should form a unit Gaussian,
     however it is better fit by a Gaussian that is 15% wider.
 
+The same analysis for one of the low-latitude fields, visit 197662, is shown
+in :numref:`source_err_v197662`. In this image the variance plane
+underestimates the scatter in the photometry by approximately 60%. This will
+certainly lead to an order of magnitude excess of detections, and we do not
+investigate these fields further.
+
 .. figure:: /_static/sec4_source_err_v197662.png
     :name: source_err_v197662
 
@@ -157,6 +191,24 @@ well-behaved fields at high latitude.
     198668, normalized by the reported uncertainity on each measurement. In
     this comparison the reported uncertainties are significantly smaller than
     the observed scatter in observed fluxes, differing by about 60%.
+
+Noise in the Difference Image
+-----------------------------
+
+The analysis of the photometry on the high latitude image shows some modest
+noise misestimates, but this alone is not sufficient to account for the large
+number of detections we see. It appears necessary for some additional source
+of either noise or misestimation of the noise to be present to cause this
+excess of detections. 
+
+.. figure:: /_static/sec4_force_random_phot_v197367.png
+    :name: fig-force-random-phot
+
+    Force photometry on random locations in the difference image. This
+    measures the noise on the same size scale as the PSF. The pipeline output
+    underestimates the noise by about 15%, same as in the original input
+    images.
+
 
 Conclusions
 ===========

@@ -13,14 +13,14 @@ serial_number: '999'
 doc_id: 'DMTN-999'
 
 # Title of the document, without the series/serial designation
-doc_title: 'False Positive Rates in the LSST Image Differencing Pipeine'
+doc_title: 'False Positive Rates in the LSST Image Differencing Pipeline'
 
 # Author names, ordered as a list. Each author name should be formatted as 'First Last'
 authors:
     - 'Colin Slater'
 
 # Current document version
-last_revised: '2016-01-19'
+last_revised: '2016-01-17'
 
 # Version. Use Semvar, e.g., 1.0, including .dev, as necessary
 # This version string should correspond to the git tag when the document is published on Zenodo
