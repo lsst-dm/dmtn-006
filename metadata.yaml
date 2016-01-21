@@ -6,11 +6,11 @@
 series: 'DMTN'
 
 # Document number, as a string. It should be three digits, padded with leading zeros
-serial_number: '999'
+serial_number: '006'
 
 # Serial number of the document. E.g. SQR-001
 # NOTE: this field is *planned* for deprecation
-doc_id: 'DMTN-999'
+doc_id: 'DMTN-006'
 
 # Title of the document, without the series/serial designation
 doc_title: 'False Positive Rates in the LSST Image Differencing Pipeline'
@@ -20,11 +20,11 @@ authors:
     - 'Colin Slater'
 
 # Current document version
-last_revised: '2016-01-17'
+last_revised: '2016-01-21'
 
 # Version. Use Semvar, e.g., 1.0, including .dev, as necessary
 # This version string should correspond to the git tag when the document is published on Zenodo
-version: '1.0'
+version: '0.1'
 
 # Digital Object Identifier (DOI). Uncomment if available.
 # Keep this DOI updated as new releases are pushed to Zenodo
@@ -51,4 +51,4 @@ url: 'http://dmtn-999.lsst.io'
 docushare_url: ''
 
 # GitHub repo URL
-github_url: 'https://github.com/lsst-dm/dmtn-999'
+github_url: 'https://github.com/lsst-dm/dmtn-006'

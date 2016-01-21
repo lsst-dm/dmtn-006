@@ -1,10 +1,10 @@
 ###########################################################################
-DMTN-999 Analysis of False Positives in the LSST Image Differencing Pipeine
+DMTN-006 False Positive Rates in the LSST Image Differencing Pipeline
 ###########################################################################
 
 An analysis of the false positives in Decam imaging data processed by the LSST pipeline.
 
-View this technote at http://dmtn-999.lsst.io or see a preview of the
+View this technote at http://dmtn-006.lsst.io or see a preview of the
 current version in `this repo`_
 
 .. _this repo: ./index.rst
@@ -23,8 +23,8 @@ You can clone this repository and build the technote locally with `Sphinx`_
 
 .. code-block:: bash
 
-   git clone https://github.com/lsst-dm/dmtn-999
-   cd dmtn-999
+   git clone https://github.com/lsst-dm/dmtn-006
+   cd dmtn-006
    pip install -r requirements.txt
    make html
 
@@ -39,7 +39,7 @@ A good primer on reStructuredText is available at http://docs.lsst.codes/en/late
 Remember that images and other types of assets should be stored in the ``_static/`` directory of this repository.
 See ``_static/README.rst`` for more information.
 
-The published technote at http://dmtn-999.lsst.io will be automatically rebuilt whenever you push your changes to the ``master`` branch on `GitHub <https://github.com/lsst-dm/dmtn-999>`_.
+The published technote at http://dmtn-006.lsst.io will be automatically rebuilt whenever you push your changes to the ``master`` branch on `GitHub <https://github.com/lsst-dm/dmtn-006>`_.
 
 Updating metadata
 =================

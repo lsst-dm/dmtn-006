@@ -199,15 +199,23 @@ The analysis of the photometry on the high latitude image shows some modest
 noise misestimates, but this alone is not sufficient to account for the large
 number of detections we see. It appears necessary for some additional source
 of either noise or misestimation of the noise to be present to cause this
-excess of detections. 
+excess of detections. An additional check on this is to perform force
+photometry on random blank-sky locations in the difference image, which will
+measure any correlated noise introduced by the convolution and warping of the
+template image. The result from this test is shown in :numref:`fig-force-random-phot`.
+The scatter is indeed enhanced over the expected unit Gaussian,
+but only by the same 15\% that was measured earlier in the original exposures.
+There again does not appear to be the sufficient noise to account for the
+several thousand Dia sources per square degree.
 
 .. figure:: /_static/sec4_force_random_phot_v197367.png
     :name: fig-force-random-phot
 
     Force photometry on random locations in the difference image. This
-    measures the noise on the same size scale as the PSF. The pipeline output
-    underestimates the noise by about 15%, same as in the original input
-    images.
+    measures the noise on the same size scale as the PSF. The reported
+    uncertainties are about 15% smaller than the observed scatter. This is
+    consistent with simply propagating the variance plane provided by the
+    Community Pipeline, without any additional image differencing noise.
 
 
 Conclusions
