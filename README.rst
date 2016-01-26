@@ -11,6 +11,16 @@ current version in `this repo`_
 
 
 
+Contents
+========
+
+In addition to the technical note text, several components of the code used for this analysis are also included in this repository. They are
+
+* ``python/diasource_mosaic.py`` - Creates a mosaic of postage stamp images (showing science, template, and difference images) for all DIA source detections.
+* ``python/forcePhotDiaSources.py`` - This script is used to measure force photometry on the science and template images at the locations of all DIA sources detected by the stack's ``imageDifference.py``.
+* ``notebooks/forced_photometry.ipynb`` - This notebook performs the analysis of the force photometry output.
+* ``notebooks/noise_analysis.ipynb`` - Analysis of the per-pixel noise estimates in the direct (science and template) Decam images.
+
 ..
   Uncomment this section and modify the DOI strings to include a Zenodo DOI badge in the README
   .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.#####.svg
@@ -29,24 +39,6 @@ You can clone this repository and build the technote locally with `Sphinx`_
    make html
 
 The built technote is located at ``_build/html/index.html``.
-
-Editing this technical note
-===========================
-
-You can edit the ``index.rst`` file, which is a reStructuredText document.
-A good primer on reStructuredText is available at http://docs.lsst.codes/en/latest/development/docs/rst_styleguide.html
-
-Remember that images and other types of assets should be stored in the ``_static/`` directory of this repository.
-See ``_static/README.rst`` for more information.
-
-The published technote at http://dmtn-006.lsst.io will be automatically rebuilt whenever you push your changes to the ``master`` branch on `GitHub <https://github.com/lsst-dm/dmtn-006>`_.
-
-Updating metadata
-=================
-
-This technote's metadata is maintained in ``metadata.yaml``.
-In this metadata you can edit the technote's title, authors, publication date, etc..
-``metadata.yaml`` is self-documenting with inline comments.
 
 ****
 
