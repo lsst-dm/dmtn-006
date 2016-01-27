@@ -27,7 +27,7 @@ solar system objects, the moving objects pipeline must be able to link
 multiple detections of the same object over a time baseline of (XXX how long?)
 to measure a candidate orbit. This process involves a computationally-
 intensive testing many plausible combinations of sources in the difference
-images (referered to as "Dia sources" for "Difference Image Analysis") to
+images (referred to as "Dia sources" for "Difference Image Analysis") to
 distinguish which sets of detections ("tracks", or "tracklets"?) describe a
 physical orbit.
 
@@ -68,7 +68,7 @@ Data and Pipeline Processing
 
 The observations used in this work were part of a near earth object (NEO)
 search program conducted in 2013 (Program 2013A-724, PI: L. Allen). The data
-are publically available in the NOAO archive, and a table of the individual
+are publicly available in the NOAO archive, and a table of the individual
 exposures used can be found in :ref:`Appendix A <appendix-a>`. These exposures
 are a small subset of the full observing program. The full set of exposures
 was divided into five bands in absolute Galactic latitude, a single field in
@@ -86,7 +86,7 @@ the astrometry [#TPV]_. In each field one image was selected to serve as the
 differenced. This was done by ``imageDifference.py``, which computed the
 matching kernel, convolved and warped the template to match the non-template
 exposure and performed the subtraction. Existing default settings were used
-throughout. Source detection was performed at the :math:`5.5\sigma` level [#5sigma]_.
+throughout. Source detection was performed at the :math:`5.0\sigma` level.
 Dipole fitting and PSF photometry was performed on all detections.
 
 A set of postage stamps showing Dia source detections are shown in
@@ -102,8 +102,8 @@ bright stars with failed subtractions.
 
 Many of the other detections show no apparent source at all in the original
 images, and the presence of a flux overdensity or underdensity is barely
-perceptable by eye. Some of these detections could simply be noise excursions
-that happen to exceede the :math:`5.5\sigma` detection threshold. However they
+perceptible by eye. Some of these detections could simply be noise excursions
+that happen to exceed the :math:`5.0\sigma` detection threshold. However they
 could also be real detections of particularly faint objects, and thus it is
 critical to understand the origin of these detections.
 
@@ -131,24 +131,6 @@ critical to understand the origin of these detections.
     distortion terms provided by the Community Pipeline and did not see a significant
     difference in the numbers of Dia source detections.
 
-.. [#5sigma] The LSST baseline is to detect at :math:`5.0\sigma`, but because
-    the number of false detections is such a steep function of this cutoff,
-    the default setting in the code at the time was :math:`5.5\sigma` to
-    limit detections. This setting will be updated to 5.0.
-
-Detections near Bright Stars
-=============================
-
-.. figure:: /_static/sec3_star_dia_correlation.png
-    :name: star_dia_correlation
-
-    Density of Dia sources near bright stars. (From star_diffim_correlation.ipynb).
-
-.. math::
-    \rho / \langle \rho \rangle = 1 + (r/r_{norm})^{-3.5},
-
-.. math::
-    r_{norm} = max(13.4 - 4(M - 12), 4) \,\rm{arcsec}
 
 Image Noise Analysis
 ====================
@@ -156,7 +138,7 @@ Image Noise Analysis
 Comparison of Direct Image Photometry
 -------------------------------------
 
-One check on the pipeline noise estimates can be made by taking two overlaping
+One check on the pipeline noise estimates can be made by taking two overlapping
 exposures, crossmatching the detected sources in each, and comparing the
 difference in the fluxes measured each time with the reported uncertainties on
 those fluxes. This test is independent of any of image differencing. The
@@ -174,7 +156,7 @@ latitude images.
     :name: fig-source-err-v197367
 
     Difference in measured flux between exposures 197367 and 197371,
-    normalized by the reported uncertainity on each measurement. If the
+    normalized by the reported uncertainty on each measurement. If the
     reported uncertainties are correct, this should form a unit Gaussian,
     however it is better fit by a Gaussian that is 15% wider.
 
@@ -188,25 +170,10 @@ investigate these fields further.
     :name: source_err_v197662
 
     Difference in measured flux between the low latitude exposures 197662 and
-    198668, normalized by the reported uncertainity on each measurement. In
+    198668, normalized by the reported uncertainty on each measurement. In
     this comparison the reported uncertainties are significantly smaller than
     the observed scatter in observed fluxes, differing by about 60%.
 
-Noise in the Difference Image
------------------------------
-
-The analysis of the photometry on the high latitude image shows some modest
-noise misestimates, but this alone is not sufficient to account for the large
-number of detections we see. It appears necessary for some additional source
-of either noise or misestimation of the noise to be present to cause this
-excess of detections. An additional check on this is to perform force
-photometry on random blank-sky locations in the difference image, which will
-measure any correlated noise introduced by the convolution and warping of the
-template image. The result from this test is shown in :numref:`fig-force-random-phot`.
-The scatter is indeed enhanced over the expected unit Gaussian,
-but only by the same 15\% that was measured earlier in the original exposures.
-There again does not appear to be the sufficient noise to account for the
-several thousand Dia sources per square degree.
 
 .. figure:: /_static/sec4_force_random_phot_v197367.png
     :name: fig-force-random-phot
@@ -214,9 +181,107 @@ several thousand Dia sources per square degree.
     Force photometry on random locations in the difference image. This
     measures the noise on the same size scale as the PSF. The reported
     uncertainties are about 15% smaller than the observed scatter. This is
-    consistent with simply propagating the variance plane provided by the
-    Community Pipeline, without any additional image differencing noise.
+    consistent with propagating the variance plane provided by the Community
+    Pipeline.
 
+
+
+Noise in Difference Images
+--------------------------
+
+After fixing the initial mis-estimates of the noise in the direct images, we
+can make a closer examination of the remaining difference image detections. A
+particularly useful tool for isolating the effects of the differencing
+pipeline from effects in the original direct images is to perform force
+photometry (fitting a PSF source amplitude at a fixed position) in the direct
+images at the location of all DIA sources. A diagram showing the results from
+this for a single CCD is shown in :numref:`forcephot_sci_template_v197367`,
+and a schematic explanation of some of the features in this diagram is shown
+in :numref:`forcephot_conceptual`. :numref:`forcephot_table` lists the number
+of sources in each category for a single field (visit 197367).
+
+The majority of all DIA sources in this field are detections that do not
+exceed :math:`5\sigma` in either the science image or the template image, but
+are the sum of a weak negative fluctuation in the template plus a weak
+positive fluctuation in the science image (or vice-versa, for negative
+detections). We believe that these are almost entirely noise effects; real
+detections in one image should not depend on the flux in the other image.
+
+
+
+.. figure:: /_static/forcephot_sci_template_v197367.png
+    :name: forcephot_sci_template_v197367
+
+    PSF photometry in the template and science exposures, forced on the
+    positions of DIA source detections. A schematic illustration of this plot
+    is also shown in :numref:`forcephot_conceptual`. The parallel diagonal
+    lines denote :math:`\rm{science} - \rm{template} > 5\sigma` and
+    :math:`\rm{science} - \rm{template} < -5 \sigma`, which are the effective
+    criteria for detection. Sources inside those lines are incidental
+    photometry failures.  Sources inside the square box do not exceed
+    :math:`5\sigma` in either direct image, and are primarily noise.
+    Detections of true moving objects are expected to appear above
+    :math:`5\sigma` in one image but close to zero flux in the other image.
+    Stars which are present in both images but vary in flux will appear in the
+    top right.
+
+.. figure:: /_static/forcephot_conceptual.png
+    :name: forcephot_conceptual
+
+    Conceptual sketch of the different regions of the force photometry diagram
+    (:numref:`forcephot_sci_template_v197367`). Most "noise" detections
+    are less than :math:`5\sigma` detections in both science and template
+    images, but their combined flux after differencing exceeds
+    :math:`5\sigma`. Most true moving objects should instead be
+    :math:`>5\sigma` detections in either the science or template image, and
+    the flux in the other image should be close to zero. Additionally, stars
+    with a flux difference greater than :math:`5\sigma` between the two images
+    (labeled "Variables" as a shorthand) will appear in the top right, since
+    they have significant flux in both images. The diagonal region crossing
+    the center of the image should be unpopulated, but incidental photometry
+    failures may appear there.
+
+
+.. table:: Source counts for visit 197367
+    :name: forcephot_table
+
+  +-----------------+------------------------------+--------------------------+
+  | Source type     | Counts per Decam focal plane | Counts per square degree |
+  +=================+==============================+==========================+
+  | Positive noise  |  6572                        |  2590                    |
+  +-----------------+------------------------------+--------------------------+
+  | Negative noise  |  7519                        |  2963                    |
+  +-----------------+------------------------------+--------------------------+
+  | Positive real   |  850                         |  335                     |
+  +-----------------+------------------------------+--------------------------+
+  | Negative real   |  968                         |  381                     |
+  +-----------------+------------------------------+--------------------------+
+  | "Variables"     |  2791                        |  1100                    |
+  +-----------------+------------------------------+--------------------------+
+  | Dipoles         |  2764                        |  1189                    |
+  +-----------------+------------------------------+--------------------------+
+
+
+Covariance in Difference Imaging
+--------------------------------
+
+XXX: Maybe this doesn't need a section, but we should explain that the false
+positive rate is high due to difficulties in estimating the noise.
+
+
+Detections near Bright Stars
+=============================
+
+.. figure:: /_static/sec3_star_dia_correlation.png
+    :name: star_dia_correlation
+
+    Density of Dia sources near bright stars. (From star_diffim_correlation.ipynb).
+
+.. math::
+    \rho / \langle \rho \rangle = 1 + (r/r_{norm})^{-3.5},
+
+.. math::
+    r_{norm} = max(13.4 - 4(M - 12), 4) \,\rm{arcsec}
 
 Conclusions
 ===========

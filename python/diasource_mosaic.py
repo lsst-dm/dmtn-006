@@ -124,13 +124,6 @@ if __name__ == "__main__":
             plt.subplot(subgrid[0,0])
             if is_dipole:
                 plt.ylabel("Dipole")
-            else:
-                plt.ylabel("{:.0f}, {:d}\n{:.0f}, {:d}".format(
-                           source.get("ip_diffim_NaiveDipoleFlux_pos_flux"),
-                           source.get("ip_diffim_NaiveDipoleFlux_npos"),
-                           source.get("ip_diffim_NaiveDipoleFlux_neg_flux"),
-                           source.get("ip_diffim_NaiveDipoleFlux_nneg")),
-                           fontsize="small")
 
         plt.savefig("diasource_mosaic_visit{:d}_ccd{:d}_{:d}.png".format(args.visitid, args.ccdnum, group_n))
         if group_n > 10:
