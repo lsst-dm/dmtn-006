@@ -315,8 +315,6 @@ between 0.8 and 0.85 for nearly all sources in this image, as seen in
     :name: forcephot_sigma_ratio
 
 
-
-
 Detections near Bright Stars
 =============================
 
@@ -340,8 +338,6 @@ Conclusions
 
 Appendix A: Data used in this work
 ==================================
-
-XXX: Instcals
 
 XXX: Stack versions? Configuration settings.
 
