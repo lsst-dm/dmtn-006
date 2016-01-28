@@ -27,8 +27,8 @@ solar system objects, the moving objects pipeline must be able to link
 multiple detections of the same object over a time baseline of (XXX how long?)
 to measure a candidate orbit. This process involves a computationally-
 intensive testing many plausible combinations of sources in the difference
-images (referred to as "Dia sources" for "Difference Image Analysis") to
-distinguish which sets of detections ("tracks", or "tracklets"?) describe a
+images (referred to as "DIA sources" for "Difference Image Analysis") to
+distinguish which sets of detections ("tracks", or "tracklets") describe a
 physical orbit.
 
 The longer this baseline grows between repeat detections of an object, the
@@ -132,11 +132,12 @@ critical to understand the origin of these detections.
     difference in the numbers of Dia source detections.
 
 
-Image Noise Analysis
-====================
+..
+  Image Noise Analysis
+  ====================
 
-Comparison of Direct Image Photometry
--------------------------------------
+Direct Image Noise Analysis
+========================================
 
 One check on the pipeline noise estimates can be made by taking two overlapping
 exposures, crossmatching the detected sources in each, and comparing the
@@ -187,7 +188,7 @@ investigate these fields further.
 
 
 Noise in Difference Images
---------------------------
+===========================
 
 After fixing the initial mis-estimates of the noise in the direct images, we
 can make a closer examination of the remaining difference image detections. A
@@ -206,7 +207,6 @@ are the sum of a weak negative fluctuation in the template plus a weak
 positive fluctuation in the science image (or vice-versa, for negative
 detections). We believe that these are almost entirely noise effects; real
 detections in one image should not depend on the flux in the other image.
-
 
 
 .. figure:: /_static/forcephot_sci_template_v197367.png
@@ -243,7 +243,7 @@ detections in one image should not depend on the flux in the other image.
 
 
 .. table:: Source counts for visit 197367
-    :name: forcephot_table
+  :name: forcephot_table
 
   +-----------------+------------------------------+--------------------------+
   | Source type     | Counts per Decam focal plane | Counts per square degree |
@@ -262,15 +262,65 @@ detections in one image should not depend on the flux in the other image.
   +-----------------+------------------------------+--------------------------+
 
 
-Covariance in Difference Imaging
---------------------------------
+Detection Threshold Estimation
+---------------------------------
 
-XXX: Maybe this doesn't need a section, but we should explain that the false
-positive rate is high due to difficulties in estimating the noise.
+If we look at only the numbers of "noise" sources, where the DIA source has
+less than :math:`5\sigma` significance in either science or template images,
+the number of detections per square degree are several orders of magnitude
+greater than expected from Gaussian noise. For an image with PSF width
+:math:`\sigma_g`, the density of detections above a threshold :math:`\nu` is
+
+.. math::
+  n(> \nu) = \frac{1}{2^{5/2} \pi^{3/2}} \nu e^{-\nu^2/2},
+
+where the total number per image is
+
+.. math::
+  N_{\rm total}(> \nu) = n(> \nu) \times \rm{nrows} \times \rm{ncol} / \sigma_g.
+
+This expectation is described in Kaiser (2004) and Becker et al. (2013). For
+the Decam images with seeing of :math:`\sigma_g = 1.8` pixels and 2k by 4k
+pixel sensor, we expect 1.5 noise detections per sensor  at :math:`5\sigma` or
+33 detections per square degree (twice that if counting both positive and
+negative detections). The current rate we measure is 100 times this. This
+suggests that some substantial quantity of artifact (either in the original
+images or introduced by the LSST software) are present, or that the pipeline's
+estimate of the threshold for detection is incorrect.
+
+There is some evidence to suggest that the latter is the dominant effect. If
+the pipeline underestimates the variance in the difference images, then what
+we call ":math:`5\sigma`" will not correspond to our actual intended detection
+threshold. This true for the direct images as well, but for the difference
+images the problem of tracking the variance becomes much more difficult due to
+the convolution steps (Price & Magnier 2004, Becker et al. 2013).
+:numref:`forcephot_hists` illustrates this error estimation problem. The panel
+on the left shows a histogram of the the signal to noise ratio from force
+photometry on the two input images. This uncertainty estimate involves no
+image differencing code and should be accurate. The panel on the right shows
+the pipeline's reported signal to noise ratio as measured on the difference
+image, where the difference image variance plane is used to estimate the
+uncertainty. It is clear that the pipeline reports that its detections are
+substantially more significant than our direct image estimates. This is
+entirely due to differences in the reported uncertainties. The ratio of the
+difference image uncertainty to the sum of the direct image uncertainties is
+between 0.8 and 0.85 for nearly all sources in this image, as seen in
+:numref:`forcephot_sigma_ratio`.
+
+
+.. figure:: /_static/forcephot_hists.png
+    :name: forcephot_hists
+
+.. figure:: /_static/forcephot_sigma_ratio.png
+    :name: forcephot_sigma_ratio
+
+
 
 
 Detections near Bright Stars
 =============================
+
+XXX: This section has not been updated to account for the updated analysis in the previous sections.
 
 .. figure:: /_static/sec3_star_dia_correlation.png
     :name: star_dia_correlation
