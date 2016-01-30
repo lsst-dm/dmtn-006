@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 from __future__ import print_function, division
 
@@ -11,7 +12,7 @@ class TaskRunnerWithArgs(pipeBase.ButlerInitializedTaskRunner):
     @staticmethod
     def getTargetList(parsedCmd, **kwargs):
         return pipeBase.TaskRunner.getTargetList(parsedCmd,
-                                                 templateExpRef=parsedCmd.templateExpID.refList,
+                                                 templateExpRef=parsedCmd.templateId.refList,
                                                  **kwargs)
 
 class ForcedPhotDiaSourcesConfig(lsst.pex.config.Config):
@@ -128,8 +129,8 @@ class ForcedPhotDiaSourcesTask(pipeBase.CmdLineTask):
 
         # Can I make an argument which is a dataset type?
         parser.add_id_argument("--id", "deepDiff_diaSrc", help="data ID of the Dia source catalog")
-        parser.add_id_argument("--templateExpID", "calexp",
-                               help="template visit ID, e.g. --templateExpID visit=6789")
+        parser.add_id_argument("--templateId", "calexp",
+                               help="template visit ID, e.g. --templateId visit=6789")
         return parser
 
     # Overriding these two functions prevent the task from attempting to save the config.

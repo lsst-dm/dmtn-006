@@ -18,6 +18,10 @@
 
 :tocdepth: 1
 
+.. warning::
+  This technical note is currently a draft! While comments are welcome, be
+  aware that it is still in the process of active writing and revision.
+
 Introduction
 ============
 
@@ -284,7 +288,7 @@ the Decam images with seeing of :math:`\sigma_g = 1.8` pixels and 2k by 4k
 pixel sensor, we expect 1.5 noise detections per sensor  at :math:`5\sigma` or
 33 detections per square degree (twice that if counting both positive and
 negative detections). The current rate we measure is 100 times this. This
-suggests that some substantial quantity of artifact (either in the original
+suggests that either some substantial quantity of artifacts (in the original
 images or introduced by the LSST software) are present, or that the pipeline's
 estimate of the threshold for detection is incorrect.
 
@@ -333,6 +337,42 @@ XXX: This section has not been updated to account for the updated analysis in th
 
 Conclusions
 ===========
+
+- Accurate tracking of the variance plane is critical for controlling the false
+  positive rate.
+
+- Convolution inherently makes it challenging to properly track the variance.
+
+- We can circumvent this problem by setting a permissive significance threshold
+  for detection in the difference image, but then filtering the results with
+  force photometry on the original input images. This filtering process produces
+  a functionally identical measurement, but with well-defined noise properties.
+
+While this general case should perform equally well as measurement on the
+difference images, there may be specialized cases where force photometry
+outperforms image differencing. Our demonstration has used individual images
+as "template" exposures for differencing. For moving objects in uncrowded
+regions, once we have detected a source as a transient the template exposure
+contributes only noise to the actual measurement. When differencing two
+individual exposures (and not a coadded template) this raises the required
+flux level for a source to reach :math:`5 \sigma` by a factor of
+:math:`\sqrt{2}`; effectively requiring it to be a :math:`7 \sigma` source in
+the direct image. This is a worst case scenario, and presumably by coadding
+many images the noise in the template can be reduced. But we can can also
+circumvent this algorithmically, by performing a permissive detection on the
+difference image but then filtering at :math:`5 \sigma` on the science
+exposure alone, not the flux difference. The assumption is that there is zero
+flux from the object in the template, and thus no reason to add the template
+exposure's noise.
+
+The improvement is greatest in the case of differencing two images with
+similar noise, but is still significant for coadds. If four images are used in
+a coadd, this method improves the flux limit for detection by 18%. If eight
+images are used, the improvement is still 14%.
+
+XXX: It's likely that someone thought of this before, have to check it's not
+in the design docs already.
+
 
 .. _appendix-a:
 
