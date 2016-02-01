@@ -194,83 +194,7 @@ investigate these fields further.
 Noise in Difference Images
 ===========================
 
-After fixing the initial mis-estimates of the noise in the direct images, we
-can make a closer examination of the remaining difference image detections. A
-particularly useful tool for isolating the effects of the differencing
-pipeline from effects in the original direct images is to perform force
-photometry (fitting a PSF source amplitude at a fixed position) in the direct
-images at the location of all DIA sources. A diagram showing the results from
-this for a single CCD is shown in :numref:`forcephot_sci_template_v197367`,
-and a schematic explanation of some of the features in this diagram is shown
-in :numref:`forcephot_conceptual`. :numref:`forcephot_table` lists the number
-of sources in each category for a single field (visit 197367).
-
-The majority of all DIA sources in this field are detections that do not
-exceed :math:`5\sigma` in either the science image or the template image, but
-are the sum of a weak negative fluctuation in the template plus a weak
-positive fluctuation in the science image (or vice-versa, for negative
-detections). We believe that these are almost entirely noise effects; real
-detections in one image should not depend on the flux in the other image.
-
-
-.. figure:: /_static/forcephot_sci_template_v197367.png
-    :name: forcephot_sci_template_v197367
-
-    PSF photometry in the template and science exposures, forced on the
-    positions of DIA source detections. A schematic illustration of this plot
-    is also shown in :numref:`forcephot_conceptual`. The parallel diagonal
-    lines denote :math:`\rm{science} - \rm{template} > 5\sigma` and
-    :math:`\rm{science} - \rm{template} < -5 \sigma`, which are the effective
-    criteria for detection. Sources inside those lines are incidental
-    photometry failures.  Sources inside the square box do not exceed
-    :math:`5\sigma` in either direct image, and are primarily noise.
-    Detections of true moving objects are expected to appear above
-    :math:`5\sigma` in one image but close to zero flux in the other image.
-    Stars which are present in both images but vary in flux will appear in the
-    top right.
-
-.. figure:: /_static/forcephot_conceptual.png
-    :name: forcephot_conceptual
-
-    Conceptual sketch of the different regions of the force photometry diagram
-    (:numref:`forcephot_sci_template_v197367`). Most "noise" detections
-    are less than :math:`5\sigma` detections in both science and template
-    images, but their combined flux after differencing exceeds
-    :math:`5\sigma`. Most true moving objects should instead be
-    :math:`>5\sigma` detections in either the science or template image, and
-    the flux in the other image should be close to zero. Additionally, stars
-    with a flux difference greater than :math:`5\sigma` between the two images
-    (labeled "Variables" as a shorthand) will appear in the top right, since
-    they have significant flux in both images. The diagonal region crossing
-    the center of the image should be unpopulated, but incidental photometry
-    failures may appear there.
-
-
-.. table:: Source counts for visit 197367
-  :name: forcephot_table
-
-  +-----------------+------------------------------+--------------------------+
-  | Source type     | Counts per Decam focal plane | Counts per square degree |
-  +=================+==============================+==========================+
-  | Positive noise  |  6572                        |  2590                    |
-  +-----------------+------------------------------+--------------------------+
-  | Negative noise  |  7519                        |  2963                    |
-  +-----------------+------------------------------+--------------------------+
-  | Positive real   |  850                         |  335                     |
-  +-----------------+------------------------------+--------------------------+
-  | Negative real   |  968                         |  381                     |
-  +-----------------+------------------------------+--------------------------+
-  | "Variables"     |  2791                        |  1100                    |
-  +-----------------+------------------------------+--------------------------+
-  | Dipoles         |  2764                        |  1189                    |
-  +-----------------+------------------------------+--------------------------+
-
-
-Detection Threshold Estimation
----------------------------------
-
-If we look at only the numbers of "noise" sources, where the DIA source has
-less than :math:`5\sigma` significance in either science or template images,
+Even after rescaling the variance planes on the input images,
 the number of detections per square degree are several orders of magnitude
 greater than expected from Gaussian noise. For an image with PSF width
 :math:`\sigma_g`, the density of detections above a threshold :math:`\nu` is
@@ -292,31 +216,109 @@ suggests that either some substantial quantity of artifacts (in the original
 images or introduced by the LSST software) are present, or that the pipeline's
 estimate of the threshold for detection is incorrect.
 
-There is some evidence to suggest that the latter is the dominant effect. If
-the pipeline underestimates the variance in the difference images, then what
-we call ":math:`5\sigma`" will not correspond to our actual intended detection
-threshold. This true for the direct images as well, but for the difference
-images the problem of tracking the variance becomes much more difficult due to
-the convolution steps (Price & Magnier 2004, Becker et al. 2013).
-:numref:`forcephot_hists` illustrates this error estimation problem. The panel
-on the left shows a histogram of the the signal to noise ratio from force
-photometry on the two input images. This uncertainty estimate involves no
-image differencing code and should be accurate. The panel on the right shows
-the pipeline's reported signal to noise ratio as measured on the difference
-image, where the difference image variance plane is used to estimate the
-uncertainty. It is clear that the pipeline reports that its detections are
-substantially more significant than our direct image estimates. This is
-entirely due to differences in the reported uncertainties. The ratio of the
-difference image uncertainty to the sum of the direct image uncertainties is
-between 0.8 and 0.85 for nearly all sources in this image, as seen in
-:numref:`forcephot_sigma_ratio`.
+We believe that latter effect is the dominant contributor of false detections.
+If the pipeline underestimates the variance in the difference images, then
+what we call ":math:`5\sigma`" will not correspond to our actual intended
+detection threshold. This true for the direct images as well, but for the
+difference images the problem of tracking the variance becomes much more
+difficult due to the convolution steps (Price & Magnier 2004, Becker et al.
+2013).
+
+A particularly useful tool for isolating the effects of the differencing
+pipeline from effects in the original direct images is to perform force
+photometry (fitting a PSF source amplitude at a fixed position) in the direct
+images at the location of all DIA sources. A diagram showing the results from
+this for a single field is shown in :numref:`forcephot_sci_template_v197367`,
+and a schematic explanation of some of the features in this diagram is shown
+in :numref:`forcephot_conceptual`.
+
+Because we are differencing two single exposures, rather than an exposure
+against a coadd, a source appearing in the science exposure will need to have
+a signal to nose ratio of :math:`5\sqrt{2}` to be detected as a :math:`5
+\sigma` source in the difference image. The force photometry diagrams thus
+show this threshold as the two diagonal lines, for positive and negative sources.
+
+Though this should be the threshold for detection, the presence of numerous
+sources just inside the :math:`5 \sqrt{2}\sigma` lines indicates that the
+pipeline is being overly permissive in detection.
+
+
+.. figure:: /_static/forcephot_sci_template_v197367.png
+    :name: forcephot_sci_template_v197367
+
+    PSF photometry in the template and science exposures, forced on the
+    positions of DIA source detections. A schematic illustration of this plot
+    is also shown in :numref:`forcephot_conceptual`. The parallel diagonal
+    lines denote :math:`\rm{science} - \rm{template} > 5\sqrt{2}\sigma` and
+    :math:`\rm{science} - \rm{template} < -5 \sqrt{2}\sigma`, which should be
+    the effective criteria for detection. The fact that numerous detections
+    appear just inside these lines is a result of the mis-estimation of the
+    variance in the difference image (some incidental failures are also
+    present in this region). Stars which are present in both images but vary
+    in flux will appear in the top right.
+
+.. figure:: /_static/forcephot_conceptual.png
+    :name: forcephot_conceptual
+
+    Conceptual sketch of the different regions of the force photometry diagram
+    (:numref:`forcephot_sci_template_v197367`). Most "noise" detections
+    are less than :math:`5\sigma` detections in both science and template
+    images, but their combined flux after differencing exceeds
+    :math:`5\sigma`. Most true moving objects should instead be
+    :math:`>5\sigma` detections in either the science or template image, and
+    the flux in the other image should be close to zero. Additionally, stars
+    with a flux difference greater than :math:`5\sigma` between the two images
+    (labeled "Variables" as a shorthand) will appear in the top right, since
+    they have significant flux in both images. The diagonal region crossing
+    the center of the image should be unpopulated, but incidental photometry
+    failures may appear there.
+
+
+:numref:`forcephot_hists` also illustrates this error estimation problem. The
+panel on the left shows a histogram of the the signal to noise ratio from
+force photometry on the two input images. This uncertainty estimate involves
+no image differencing code and should be accurate. The panel on the right
+shows the pipeline's reported signal to noise ratio as measured on the
+difference image, where the difference image variance plane is used to
+estimate the uncertainty. It is clear that the pipeline reports that its
+detections are substantially more significant than our direct image estimates.
+This is entirely due to differences in the reported uncertainties. The ratio
+of the difference image uncertainty to the sum of the direct image
+uncertainties is between 0.8 and 0.85 for nearly all sources in this image, as
+seen in :numref:`forcephot_sigma_ratio`.
 
 
 .. figure:: /_static/forcephot_hists.png
     :name: forcephot_hists
 
+    Comparison of force photometry SNR versus the SNR of measurements on the
+    difference image.
+
 .. figure:: /_static/forcephot_sigma_ratio.png
     :name: forcephot_sigma_ratio
+
+    Ratio of the reported difference image uncertainty to the expected
+    uncertainty for all sources in on one CCD.
+
+XXX: Conclusion about the importance of filtering, then present results.
+
+.. table:: Source counts for visit 197367
+  :name: forcephot_table
+
+  +----------------------------------+------------------------------+--------------------------+
+  | Source Type                      | Counts per Decam focal plane | Counts per square degree |
+  +==================================+==============================+==========================+
+  | Positive Sources                 | 9,062                        | 3,572                    |
+  +----------------------------------+------------------------------+--------------------------+
+  | Negative Sources                 | 12,089                       | 4,763                    |
+  +----------------------------------+------------------------------+--------------------------+
+  | Positive after force-phot filter | 1,220                        | 480                      |
+  +----------------------------------+------------------------------+--------------------------+
+  | Negative after force-phot filter | 1,408                        | 555                      |
+  +----------------------------------+------------------------------+--------------------------+
+  | Dipoles                          | 2,853                        | 1,124                    |
+  +----------------------------------+------------------------------+--------------------------+
+
 
 
 Detections near Bright Stars
@@ -371,7 +373,16 @@ a coadd, this method improves the flux limit for detection by 18%. If eight
 images are used, the improvement is still 14%.
 
 XXX: It's likely that someone thought of this before, have to check it's not
-in the design docs already.
+in the design docs already. Also sources on top of galaxys, etc., will be
+over-detected since their psf flux will have a contribution from the non-zero
+background.
+
+Further work:
+
+- Testing on deeper exposures. Data are available for this (HITS survey), can be done soon.
+
+- Building and differencing against coadded templates. The LSST stack supports this, also a near-term project.
+
 
 
 .. _appendix-a:
