@@ -122,14 +122,14 @@ critical to understand the origin of these detections.
 
 
 
+..
+  .. figure:: /_static/sec4_dia_density.png
+      :name: dia_density
 
-.. figure:: /_static/sec4_dia_density.png
-    :name: dia_density
-
-    Density of dipole and non-dipole Dia sources. The low latitude fields have
-    Dia counts greatly above the top of the plot due to the noise issue
-    described in (XXX WHERE). The high latitude fields are much more
-    consistent.
+      Density of dipole and non-dipole Dia sources. The low latitude fields have
+      Dia counts greatly above the top of the plot due to the noise issue
+      described in (XXX WHERE). The high latitude fields are much more
+      consistent.
 
 .. [#TPV] We tested the processing both with and without the astrometric
     distortion terms provided by the Community Pipeline and did not see a significant
@@ -228,11 +228,9 @@ A particularly useful tool for isolating the effects of the differencing
 pipeline from effects in the original direct images is to perform force
 photometry (fitting a PSF source amplitude at a fixed position) in the direct
 images at the location of all DIA sources. A diagram showing the results from
-this for a single field is shown in :numref:`forcephot_sci_template_v197367`,
-and a schematic explanation of some of the features in this diagram is shown
-in :numref:`forcephot_conceptual`.
+this for a single field is shown in :numref:`forcephot_sci_template_v197367`.
 
-Because we are differencing two single exposures, rather than an exposure
+Because we are differencing two single exposures rather than an exposure
 against a coadd, a source appearing in the science exposure will need to have
 a signal to nose ratio of :math:`5\sqrt{2}` to be detected as a :math:`5
 \sigma` source in the difference image. The force photometry diagrams thus
@@ -240,38 +238,47 @@ show this threshold as the two diagonal lines, for positive and negative sources
 
 Though this should be the threshold for detection, the presence of numerous
 sources just inside the :math:`5 \sqrt{2}\sigma` lines indicates that the
-pipeline is being overly permissive in detection.
+pipeline is being overly permissive in detection. The uncertainty on the
+difference image measurement cannot be less than the uncertainties on the two
+input images, but the convolution used for matching the PSFs makes it
+difficult to keep track of this uncertainty. When the pipeline convolves the
+template image, the variance plane is reduced since the process is essentially
+Gaussian smoothing. While this does track the diminished per-pixel variance,
+it does not account for the correlations introduced between adjacent pixels.
+These untracked correlations will then boost the significance of detections
+when the difference image is convolved with the detection kernel, resulting in
+an excess of false positives.
 
 
 .. figure:: /_static/forcephot_sci_template_v197367.png
     :name: forcephot_sci_template_v197367
 
     PSF photometry in the template and science exposures, forced on the
-    positions of DIA source detections. A schematic illustration of this plot
-    is also shown in :numref:`forcephot_conceptual`. The parallel diagonal
+    positions of DIA source detections. The parallel diagonal
     lines denote :math:`\rm{science} - \rm{template} > 5\sqrt{2}\sigma` and
-    :math:`\rm{science} - \rm{template} < -5 \sqrt{2}\sigma`, which should be
-    the effective criteria for detection. The fact that numerous detections
+    :math:`\rm{science} - \rm{template} < -5 \sqrt{2}\sigma`, which are the intended
+    criteria for detection. The fact that numerous detections
     appear just inside these lines is a result of the mis-estimation of the
     variance in the difference image (some incidental failures are also
-    present in this region). Stars which are present in both images but vary
-    in flux will appear in the top right.
+    present in this region).
 
-.. figure:: /_static/forcephot_conceptual.png
-    :name: forcephot_conceptual
 
-    Conceptual sketch of the different regions of the force photometry diagram
-    (:numref:`forcephot_sci_template_v197367`). Most "noise" detections
-    are less than :math:`5\sigma` detections in both science and template
-    images, but their combined flux after differencing exceeds
-    :math:`5\sigma`. Most true moving objects should instead be
-    :math:`>5\sigma` detections in either the science or template image, and
-    the flux in the other image should be close to zero. Additionally, stars
-    with a flux difference greater than :math:`5\sigma` between the two images
-    (labeled "Variables" as a shorthand) will appear in the top right, since
-    they have significant flux in both images. The diagonal region crossing
-    the center of the image should be unpopulated, but incidental photometry
-    failures may appear there.
+..
+  .. figure:: /_static/forcephot_conceptual.png
+      :name: forcephot_conceptual
+
+      Conceptual sketch of the different regions of the force photometry diagram
+      (:numref:`forcephot_sci_template_v197367`). Most "noise" detections
+      are less than :math:`5\sigma` detections in both science and template
+      images, but their combined flux after differencing exceeds
+      :math:`5\sigma`. Most true moving objects should instead be
+      :math:`>5\sigma` detections in either the science or template image, and
+      the flux in the other image should be close to zero. Additionally, stars
+      with a flux difference greater than :math:`5\sigma` between the two images
+      (labeled "Variables" as a shorthand) will appear in the top right, since
+      they have significant flux in both images. The diagonal region crossing
+      the center of the image should be unpopulated, but incidental photometry
+      failures may appear there.
 
 
 :numref:`forcephot_hists` also illustrates this error estimation problem. The
@@ -300,26 +307,43 @@ seen in :numref:`forcephot_sigma_ratio`.
     Ratio of the reported difference image uncertainty to the expected
     uncertainty for all sources in on one CCD.
 
-XXX: Conclusion about the importance of filtering, then present results.
+
+The problem of correlated noise has been studied before and algorithmic
+strategies have been proposed for mitigating the issue (Price & Magnier 2010,
+Becker et al. 2013). These methods require some level of modification to or
+analysis of the images in the differencing process. We propose that there is a
+simpler solution that will work equivalently well: the same force photometry
+measurements that we have used to diagnose this problem may also be used to
+filter "real" :math:`5\sigma` detections from excess of noise detections. This
+requires little change to the pipeline and can be easily incorporated into the
+standard processing. The reported measurement would then be the difference of
+the two PSF fluxes from the direct images, rather than from the difference
+image. This is a completely equivalent measurement.
 
 .. table:: Source counts for visit 197367
   :name: forcephot_table
 
-  +----------------------------------+------------------------------+--------------------------+
-  | Source Type                      | Counts per Decam focal plane | Counts per square degree |
-  +==================================+==============================+==========================+
-  | Positive Sources                 | 9,062                        | 3,572                    |
-  +----------------------------------+------------------------------+--------------------------+
-  | Negative Sources                 | 12,089                       | 4,763                    |
-  +----------------------------------+------------------------------+--------------------------+
-  | Positive after force-phot filter | 1,220                        | 480                      |
-  +----------------------------------+------------------------------+--------------------------+
-  | Negative after force-phot filter | 1,408                        | 555                      |
-  +----------------------------------+------------------------------+--------------------------+
-  | Dipoles                          | 2,853                        | 1,124                    |
-  +----------------------------------+------------------------------+--------------------------+
++----------------------------------------+------------------------------+--------------------------+
+| Source Type                            | Counts per Decam focal plane | Counts per square degree |
++========================================+==============================+==========================+
+| Positive Sources                       | 9062                         | 3572                     |
++----------------------------------------+------------------------------+--------------------------+
+| Negative Sources                       | 12089                        | 4763                     |
++----------------------------------------+------------------------------+--------------------------+
+| Positive after force-photometry filter | 1,220                        | 480                      |
++----------------------------------------+------------------------------+--------------------------+
+| Negative after force-photometry filter | 1,408                        | 555                      |
++----------------------------------------+------------------------------+--------------------------+
+| Dipoles (not included above)           | 2,853                        | 1,124                    |
++----------------------------------------+------------------------------+--------------------------+
 
+The results of this process are quantified for a single field in
+:numref:`forcephot_table`. The number of detections is reduced by a factor of
+8-10, simply by eliminating all detections that could not possibly be
+:math:`5\sigma`. The resulting detections are very clean.
 
+XXX: Plot of different detection categories against galactic latitude, just to
+show that we get similar results for many fields.
 
 Detections near Bright Stars
 =============================
