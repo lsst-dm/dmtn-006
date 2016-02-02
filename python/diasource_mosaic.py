@@ -35,11 +35,11 @@ def zscale_image(input_img, contrast=0.25):
 # This matches up which exposures were differenced against which templates,
 # and is purely specific to this particular set of data.
 #
-template_catalog = {197790:  [197790, 197802, 198372, 198376, 198380, 198384],
-                    197662:  [197662, 198668, 199009, 199021, 199033],
-                    197408:  [197400, 197404, 197408, 197412],
-                    197384:  [197384, 197388, 197392],
-                    197371:  [197367, 197371, 197375, 197379]}
+template_catalog = {197790:  [197802, 198372, 198376, 198380, 198384],
+                    197662:  [198668, 199009, 199021, 199033],
+                    197408:  [197400, 197404, 197412],
+                    197384:  [197388, 197392],
+                    197371:  [197367, 197375, 197379]}
 # Need to invert this to template_visit_catalog[exposure] = template
 template_visit_catalog = {}
 for templateid, visits in template_catalog.iteritems():

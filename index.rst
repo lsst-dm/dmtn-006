@@ -199,7 +199,7 @@ greater than expected from Gaussian noise. For an image with PSF width
 where the total number per image is
 
 .. math::
-  N_{\rm total}(> \nu) = n(> \nu) \times \rm{nrows} \times \rm{ncol} / \sigma_g.
+  N_{\rm total}(> \nu) = n(> \nu) / \sigma_g \times \rm{nrows} \times \rm{ncol}.
 
 This expectation is described in Kaiser (2004) and Becker et al. (2013). For
 the Decam images with seeing of :math:`\sigma_g = 1.8` pixels and 2k by 4k
@@ -336,8 +336,21 @@ The results of this process are quantified for a single field in
 8-10, simply by eliminating all detections that could not possibly be
 :math:`5\sigma`. The resulting detections are very clean.
 
-XXX: Plot of different detection categories against galactic latitude, just to
-show that we get similar results for many fields.
+.. figure:: /_static/postfiltered_counts.png
+    :name: postfiltered_counts
+
+    Result of forced photometry filtering. The exposures are arbitrarily
+    numbered and cover several different nights. Each shaded region
+    corresponds to a different target field. While some fields apparently
+    developed a bias between negative and positive counts, this is potentially
+    a result of the template selection process.
+
+.. figure:: /_static/postfiltered_ratios.png
+    :name: postfiltered_ratios
+
+    Ratio of the post-filtered counts to the raw detection counts. Per-field
+    shading is the same as :numref:`postfiltered_counts`.
+
 
 Detections near Bright Stars
 =============================
