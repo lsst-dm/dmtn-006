@@ -121,24 +121,19 @@ critical to understand the origin of these detections.
     empty.
 
 
+.. figure:: /_static/sec4_dia_density.png
+    :name: dia_density
 
-..
-  .. figure:: /_static/sec4_dia_density.png
-      :name: dia_density
-
-      Density of dipole and non-dipole Dia sources. The low latitude fields have
-      Dia counts greatly above the top of the plot due to the noise issue
-      described in (XXX WHERE). The high latitude fields are much more
-      consistent.
+    Density of dipole and non-dipole Dia sources. The low latitude fields have
+    Dia counts greatly above the top of the plot due to the noise issue
+    described in (XXX WHERE). The high latitude fields are much more
+    consistent.
 
 .. [#TPV] We tested the processing both with and without the astrometric
     distortion terms provided by the Community Pipeline and did not see a significant
     difference in the numbers of Dia source detections.
 
 
-..
-  Image Noise Analysis
-  ====================
 
 Direct Image Noise Analysis
 ========================================
@@ -153,9 +148,8 @@ is also used for computing the uncertainties on the difference images.
 :numref:`fig-source-err-v197367` shows this analysis performed for a pair of
 well-behaved fields at high latitude. The scatter in the measured fluxes is
 about 15% wider than the pipeline uncertainties report. While this is enough
-to account for ~300 detections at :math:`5.5\sigma` per square degree, that
-still falls fall short of the actual detection numbers we see in the high
-latitude images.
+to account for ~300 detections per square degree, that still falls fall short
+of the actual detection numbers we see in the high latitude images.
 
 .. figure:: /_static/sec4_source_err_v197367.png
     :name: fig-source-err-v197367
@@ -323,19 +317,19 @@ image. This is a completely equivalent measurement.
 .. table:: Source counts for visit 197367
   :name: forcephot_table
 
-+----------------------------------------+------------------------------+--------------------------+
-| Source Type                            | Counts per Decam focal plane | Counts per square degree |
-+========================================+==============================+==========================+
-| Positive Sources                       | 9062                         | 3572                     |
-+----------------------------------------+------------------------------+--------------------------+
-| Negative Sources                       | 12089                        | 4763                     |
-+----------------------------------------+------------------------------+--------------------------+
-| Positive after force-photometry filter | 1,220                        | 480                      |
-+----------------------------------------+------------------------------+--------------------------+
-| Negative after force-photometry filter | 1,408                        | 555                      |
-+----------------------------------------+------------------------------+--------------------------+
-| Dipoles (not included above)           | 2,853                        | 1,124                    |
-+----------------------------------------+------------------------------+--------------------------+
+  +----------------------------------------+------------------------------+--------------------------+
+  | Source Type                            | Counts per Decam focal plane | Counts per square degree |
+  +========================================+==============================+==========================+
+  | Positive Sources                       | 9062                         | 3572                     |
+  +----------------------------------------+------------------------------+--------------------------+
+  | Negative Sources                       | 12089                        | 4763                     |
+  +----------------------------------------+------------------------------+--------------------------+
+  | Positive after force-photometry filter | 1,220                        | 480                      |
+  +----------------------------------------+------------------------------+--------------------------+
+  | Negative after force-photometry filter | 1,408                        | 555                      |
+  +----------------------------------------+------------------------------+--------------------------+
+  | Dipoles (not included above)           | 2,853                        | 1,124                    |
+  +----------------------------------------+------------------------------+--------------------------+
 
 The results of this process are quantified for a single field in
 :numref:`forcephot_table`. The number of detections is reduced by a factor of
