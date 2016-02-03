@@ -121,13 +121,13 @@ critical to understand the origin of these detections.
     empty.
 
 
-.. figure:: /_static/sec4_dia_density.png
-    :name: dia_density
+.. figure:: /_static/unfiltered_counts.png
+    :name: unfiltered_counts
 
-    Density of dipole and non-dipole Dia sources. The low latitude fields have
-    Dia counts greatly above the top of the plot due to the noise issue
-    described in (XXX WHERE). The high latitude fields are much more
-    consistent.
+    Raw density of DIA sources per square degree, without any filtering, for
+    all exposures in this work. The exposures are arbitrarily
+    numbered and cover several different nights. Each shaded region
+    corresponds to a different target field.
 
 .. [#TPV] We tested the processing both with and without the astrometric
     distortion terms provided by the Community Pipeline and did not see a significant
@@ -159,11 +159,11 @@ of the actual detection numbers we see in the high latitude images.
     reported uncertainties are correct, this should form a unit Gaussian,
     however it is better fit by a Gaussian that is 15% wider.
 
-The same analysis for one of the low-latitude fields, visit 197662, is shown
-in :numref:`source_err_v197662`. In this image the variance plane
-underestimates the scatter in the photometry by approximately 60%. This will
-certainly lead to an order of magnitude excess of detections, and we do not
-investigate these fields further.
+The same analysis for one of the visits with extremely high DIA source counts,
+visit 197662, is shown in :numref:`source_err_v197662`. In this image the
+variance plane underestimates the scatter in the photometry by approximately
+60%. This will certainly lead to an order of magnitude excess of detections,
+and we do not investigate these fields further.
 
 .. figure:: /_static/sec4_source_err_v197662.png
     :name: source_err_v197662
@@ -171,7 +171,7 @@ investigate these fields further.
     Difference in measured flux between the low latitude exposures 197662 and
     198668, normalized by the reported uncertainty on each measurement. In
     this comparison the reported uncertainties are significantly smaller than
-    the observed scatter in observed fluxes, differing by about 60%.
+    the observed scatter in the fluxes, differing by about 60%.
 
 
 .. figure:: /_static/sec4_force_random_phot_v197367.png
@@ -299,7 +299,16 @@ seen in :numref:`forcephot_sigma_ratio`.
     :name: forcephot_sigma_ratio
 
     Ratio of the reported difference image uncertainty to the expected
-    uncertainty for all sources in on one CCD.
+    uncertainty for all sources on one CCD.
+
+.. figure:: /_static/forcephot_sigmas_perccd.png
+    :name: forcephot_sigmas_perccd
+
+    Mean of the ratio of reported uncertainty to expected uncertainty for each
+    CCDs over all visits. While values around 0.8 are generally common, there
+    is some variation from field to field. This is presumably related to the
+    observing conditions in some fashion, but we have not explored the source
+    of this variation.
 
 
 The problem of correlated noise has been studied before and algorithmic
@@ -339,18 +348,15 @@ The results of this process are quantified for a single field in
 .. figure:: /_static/postfiltered_counts.png
     :name: postfiltered_counts
 
-    Result of forced photometry filtering. The exposures are arbitrarily
-    numbered and cover several different nights. Each shaded region
-    corresponds to a different target field. While some fields apparently
+    Result of forced photometry filtering. The exposure numbering and shading
+    is the same as :numref:`unfiltered_counts`. While some fields apparently
     developed a bias between negative and positive counts, this is potentially
     a result of the template selection process.
 
 .. figure:: /_static/postfiltered_ratios.png
     :name: postfiltered_ratios
 
-    Ratio of the post-filtered counts to the raw detection counts. Per-field
-    shading is the same as :numref:`postfiltered_counts`.
-
+    Ratio of the filtered counts to the raw detection counts.
 
 Detections near Bright Stars
 =============================
@@ -413,6 +419,8 @@ Further work:
 - Testing on deeper exposures. Data are available for this (HITS survey), can be done soon.
 
 - Building and differencing against coadded templates. The LSST stack supports this, also a near-term project.
+
+- Dependence on source density, Galactic latitude, sky background, etc.
 
 
 

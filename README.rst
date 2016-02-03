@@ -19,6 +19,7 @@ In addition to the technical note text, several components of the code used for 
 * ``python/diasource_mosaic.py`` - Creates a mosaic of postage stamp images (showing science, template, and difference images) for all DIA source detections.
 * ``python/forcePhotDiaSources.py`` - This script is used to measure force photometry on the science and template images at the locations of all DIA sources detected by the stack's ``imageDifference.py``.
 * ``notebooks/forced_photometry.ipynb`` - This notebook performs the analysis of the force photometry output.
+* ``notebooks/forced_phot_sql.ipynb`` - This version of the analysis is better equipped for working on all of the fields at once.
 * ``notebooks/noise_analysis.ipynb`` - Analysis of the per-pixel noise estimates in the direct (science and template) Decam images.
 
 ..

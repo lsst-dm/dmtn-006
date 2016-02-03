@@ -6,7 +6,6 @@ import lsst
 import lsst.meas.base as measBase
 import lsst.afw.table as afwTable
 import lsst.pipe.base as pipeBase
-import pdb
 
 class TaskRunnerWithArgs(pipeBase.ButlerInitializedTaskRunner):
     @staticmethod
