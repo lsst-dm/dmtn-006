@@ -340,18 +340,11 @@ The results of this process are quantified for a single field in
 Detections near Bright Stars
 =============================
 
-XXX: This section has not been updated to account for the updated analysis in the previous sections.
 
-.. figure:: /_static/sec3_star_dia_correlation.png
-    :name: star_dia_correlation
+.. figure:: /_static/correlation_cumulative.png
+    :name: correlation_cumulative.png
 
-    Density of Dia sources near bright stars. (From star_diffim_correlation.ipynb).
-
-.. math::
-    \rho / \langle \rho \rangle = 1 + (r/r_{norm})^{-3.5},
-
-.. math::
-    r_{norm} = max(13.4 - 4(M - 12), 4) \,\rm{arcsec}
+    Cumulative distribution of excess detections near bright stars.
 
 Conclusions
 ===========
