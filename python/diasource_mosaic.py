@@ -49,22 +49,6 @@ for templateid, visits in template_catalog.iteritems():
 def make_cutout(img, x, y, cutout_size=20):
     return img[(x-cutout_size/2):(x+cutout_size/2),(y-cutout_size/2):(y+cutout_size/2)]
 
-def make_source_center(source):
-    pos_x = source.get("ip_diffim_NaiveDipoleCentroid_pos_x")
-    pos_y = source.get("ip_diffim_NaiveDipoleCentroid_pos_y")
-    have_pos = not (np.isnan(pos_x)  or np.isnan(pos_y))
-
-    neg_x = source.get("ip_diffim_NaiveDipoleCentroid_neg_x")
-    neg_y = source.get("ip_diffim_NaiveDipoleCentroid_neg_y")
-    have_neg = not (np.isnan(neg_x) or np.isnan(neg_y))
-
-    if have_pos and have_neg:
-        return (0.5*(pos_x + neg_x), 0.5*(pos_y + neg_y))
-    elif not have_neg:
-        return pos_x, pos_y
-    else:
-        return neg_x, neg_y
-
 def group_items(items, group_length):
     for n in xrange(0, len(items), group_length):
         yield items[n:(n+group_length)]
@@ -104,7 +88,8 @@ if __name__ == "__main__":
         top_level_grid = gridspec.GridSpec(7, 3)
         for source_n,source in enumerate(source_group):
 
-            source_x, source_y = make_source_center(source)
+            source_x = source.get("ip_diffim_NaiveDipoleCentroid_x")
+            source_y = source.get("ip_diffim_NaiveDipoleCentroid_y")
 
             is_dipole = source.get("classification_dipole") == 1
 

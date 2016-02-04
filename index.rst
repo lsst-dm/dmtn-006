@@ -1,26 +1,5 @@
-..
-  See http://docs.lsst.codes/en/latest/development/docs/rst_styleguide.html
-  for a guide to reStructuredText writing.
-
-  To add images, add the image file (png, svg or jpeg preferred) to the
-  _static/ directory. The reST syntax for adding the image is
-
-  .. figure:: /_static/filename.ext
-     :name: fig-label
-     :target: http://target.link/url
-
-     Caption text.
-
-   Run: ``make html`` and ``open _build/html/index.html`` to preview your work.
-   See the README at https://github.com/lsst-sqre/lsst-report-bootstrap or
-   this repo's README for more info.
-
 
 :tocdepth: 1
-
-.. warning::
-  This technical note is currently a draft! While comments are welcome, be
-  aware that it is still in the process of active writing and revision.
 
 Introduction
 ============
