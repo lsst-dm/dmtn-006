@@ -340,11 +340,50 @@ The results of this process are quantified for a single field in
 Detections near Bright Stars
 =============================
 
+In addition to the overall rate of false positives across the each pointing,
+the spatial distribution of detections present additional challenges to
+successfully recovering moving objects. Strong correlations between DIA
+sources can create numerous tracklets of the right length to mimic moving
+sources. Such correlations are often found around bright stars, where
+diffraction spikes, increased photon noise from the wings of the star, or
+minor image misalignments can all result in an excess of DIA sources.
+
+Many of these effects are caused by the telescope optics, and thus our
+precursor datasets are less likely to precisely capture all of the structure
+that will be present around bright stars in LSST. However, we can test the
+LSST software's ability to mitigate such artifacts, by effective masking,
+tracking of the per-pixel noise, or other methods.
+
+To compute the distribution of excess detections around bright stars, we
+cross-matched the UCAC4 catalog of bright stars against the detections in all
+fields. :numref:`correlation_cumulative` shows the cumulative count of excess
+DIA sources as a function of distance from a bright star, with several
+different magnitude bins for the central star. These curves have had the
+cumulative counts just from randomly distributed DIA sources subtracted off
+(on average 2 stars inside a 60 arcsecond radius), leaving only the detections
+that result from the bright star.
 
 .. figure:: /_static/correlation_cumulative.png
-    :name: correlation_cumulative.png
+    :name: correlation_cumulative
 
     Cumulative distribution of excess detections near bright stars.
+
+Overall the numbers of excess detections are not large; even a 8th magnitude
+star produces only 8 extra DIA sources, and this number falls off rapidly for
+fainter stars. These detections all occur outside of 8 arcseconds, since this
+is the size of the "footprint" that the LSST pipeline assigns to these bright
+objects. The vast majority of excess detections occur in an annulus between
+this 8 arcsecond limit and 20 arcseconds.
+
+.. figure:: /_static/brightstar_dia_snr.png
+    :name: brightstar_dia_snr
+
+    Signal to noise ratio distribution for DIA sources within 20 arcseconds vs
+    outside of 30 arcseconds from a bright star (brighter than :math:`i=11`).
+    The distributions are normalized to have the same total counts. There is
+    no significant difference in the SNR distribution between the sources
+    around bright stars and the sources that randomly cover the field.
+
 
 Conclusions
 ===========
