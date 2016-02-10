@@ -384,6 +384,51 @@ this 8 arcsecond limit and 20 arcseconds.
     no significant difference in the SNR distribution between the sources
     around bright stars and the sources that randomly cover the field.
 
+Model of Excess Detections
+--------------------------
+
+A simple model for these excess detections is shown in
+:numref:`correlation_model`. In this we assume a power law for the total
+number of detections per bright star, as a function of bright star magnitude.
+An approximate fit for this power law is shown in
+:numref:`correlation_powerlaw`, and the number of counts :math:`C` can be
+written as
+
+.. math::
+  C = (M/11.0)^{-7},
+
+where M is the i-band magnitude of the bright star. These detections are then
+spread uniformly in an annulus around the bright source of size
+
+.. math::
+  r_{inner} = 8'',
+.. math::
+  r_{outer} = 50'' - 3 \times M.
+
+This puts the outer edge of the
+detections at :math:`22''` for the 9th magnitude case and gradually shrinks
+the annulus for fainter sources.
+
+While this is certainly not a fit that is accurate to 10\%, it is generally
+within :math:`\pm 1` detection. The assumption of a constant density
+annulus of detections is also imprecise but simple to implement. A density
+gradient could be added if necessary, but for the purposes of testing the
+performance of moving object detection we believe this to be sufficient.
+
+
+.. figure:: /_static/correlation_model.png
+    :name: correlation_model
+
+    Basic model for the cumulative distribution of counts around bright stars.
+    The model is clearly not precise, but the raw number of counts per stars
+    is so low that we are generally within :math:`\pm 1` detection per bright
+    star.
+
+.. figure:: /_static/correlation_powerlaw.png
+    :name: correlation_powerlaw
+
+    Simple power law model for the number of excess detections inside 30
+    arcseconds from a bright star.
 
 Conclusions
 ===========
@@ -415,14 +460,9 @@ exposure alone, not the flux difference. The assumption is that there is zero
 flux from the object in the template, and thus no reason to add the template
 exposure's noise.
 
-The improvement is greatest in the case of differencing two images with
-similar noise, but is still significant for coadds. If four images are used in
-a coadd, this method improves the flux limit for detection by 18%. If eight
-images are used, the improvement is still 14%.
-
 XXX: It's likely that someone thought of this before, have to check it's not
-in the design docs already. Also sources on top of galaxys, etc., will be
-over-detected since their psf flux will have a contribution from the non-zero
+in the design docs already. Also sources on top of galaxies, etc., will be
+over-detected since their PSF flux will have a contribution from the non-zero
 background.
 
 Further work:
