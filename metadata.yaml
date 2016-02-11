@@ -20,7 +20,7 @@ authors:
     - 'Colin Slater'
 
 # Current document version
-last_revised: '2016-02-03'
+last_revised: '2016-02-10'
 
 # Version. Use Semvar, e.g., 1.0, including .dev, as necessary
 # This version string should correspond to the git tag when the document is published on Zenodo
