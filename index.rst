@@ -5,51 +5,56 @@ Introduction
 ============
 
 Detections of image and processing artifacts in image differencing present a
-significant challenge to LSST's recovery of faint moving objects. To identify
-solar system objects, the moving objects pipeline must be able to link
-multiple detections of the same object over a time baseline of (XXX how long?)
-to measure a candidate orbit. This process involves a computationally-
-intensive testing many plausible combinations of sources in the difference
-images (referred to as "DIA sources" for "Difference Image Analysis") to
-distinguish which sets of detections ("tracks", or "tracklets") describe a
-physical orbit.
+significant challenge to LSST's recovery of faint moving objects. The task of
+the moving objects pipeline is to take all detections of new or changed
+sources in a set of images and identify which of these detections can be
+linked together as repeat observations of a single moving object. While
+linking observations of one object may be simple, the difficulty comes from
+rejecting every other combination of detections. These detections may come
+from other moving objects, or from astrophysical transients outside the Solar
+System, or from imaging and data processing artifacts. All of these sources of
+candidate detections contribute a background which the moving objects pipeline
+must search through in order to correctly link object tracks.
 
-The longer this baseline grows between repeat detections of an object, the
-larger the area that must be searched grows. This may remain computationally
-tractable if the number of candidate detections that must be tested is small,
-but can quickly become infeasible if the density of candidates is large.
-Previous searches for solar system objects have found that the vast majority
-of their candidate detections are caused by imaging or processing artifacts,
-rather than real solar system objects. In the case of Pan-STARRS, the cadence
-had to be modified to include repeat visits of a field within a single night,
-shrinking the time baseline and thus the search space (CITE). The Dark Energy
-Survey, while mainly searching for transients rather than moving solar system
-objects, employed machine learning algorithms to exclude detections that were
-unlikely to be physical (CITE Kessler).
+All asteroid surveys must rely on both their observing cadence and their data
+processing to enable detection of moving objects. For LSST, in the baseline
+cadence the scheduler attempts to visit fields twice within 90 minutes. These
+visits within one night produce a set of "tracklets" between every combination
+of detections that have separations corresponding to reasonable Solar System
+object velocities. This linkage is relatively simple, but tracklets must then
+be linked into multi-night tracks. This is the most computationally-intensive
+step in the process, since numerous combinations of tracklets must checked to
+see if their motion is consistent with an orbit (quadratic motion with
+reasonable acceleration; also see LDM-156).
+
+Previous searches for asteroids have found that the vast majority of candidate
+detections are caused by imaging or processing artifacts, which leads to an
+excess of tracklets and an excessive computational cost for distinguishing
+real tracks. In the case of Pan-STARRS, the false positive rate of
+:math:`8,000` per square degree necessitated additional observations of each
+field in a single night, so that true objects would have tracklets with three
+or more detections (Denneau et al. 2013). The Dark Energy Survey, while mainly
+searching for transients rather than moving solar system objects, employed
+machine learning algorithms to exclude detections that were unlikely to be
+physical (Kessler et al. 2015, Goldstein et al. 2015).
 
 The goal of this study is to quantify the expected rate of false positive
 detections in LSST, using the LSST image differencing pipeline run on
-observations taken with Decam. This false positive rate can then be used in
-subsequent works to assess the recovery rates of solar system objects under
-differing candidate observing cadences. The Decam CCDs are reasonable analogs
-of the sensors that will be used in LSST, significantly more so than the Pan-
-STARRS orthogonal transfer arrays. Producing clean difference images is a
-serious software challenge. As described in several LSST reports (Becker et
-al. Winter 2013 report, CITES) and published works (Alard & Lupton, Zackay,
-etc), the convolution process required to match the point spread functions of
-the two images (PSFs) introduces correlated noise which complicates detection.
-Improved algorithms for image subtraction are still an active area of research
-(Zackay 2015). Our objective is to characterize the performance of the current
-pipeline with the understanding that it may be improved in the time leading up
-to the start of operations.
-
-XXX: Need to be quantitative about time baselines for recovery.
+observations taken with Decam. Producing clean difference images is a
+substantial software challenge. As described in LSST reports (Becker et al.
+Winter 2013 report) and published works (Alard & Lupton 1991), the convolution
+process required to match the point spread functions of the two images (PSFs)
+introduces correlated noise which complicates detection. Improved algorithms
+for image subtraction are still an active area of research (Zackay et al.
+2015). Our objective is to characterize the performance of the current
+pipeline with the understanding that it will be improved in the time leading
+up to the start of operations.
 
 
 Data and Pipeline Processing
 ============================
 
-The observations used in this work were part of a near earth object (NEO)
+The observations used in this work were part of a near Earth object (NEO)
 search program conducted in 2013 (Program 2013A-724, PI: L. Allen). The data
 are publicly available in the NOAO archive, and a table of the individual
 exposures used can be found in :ref:`Appendix A <appendix-a>`. These exposures
@@ -505,6 +510,12 @@ Further work:
 
 - Dependence on source density, Galactic latitude, sky background, etc.
 
+
+..
+  References
+  ==========
+
+  .. [denneau] Denneau et al. 2013
 
 
 .. _appendix-a:
