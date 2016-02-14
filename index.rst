@@ -407,7 +407,7 @@ An approximate fit for this power law is shown in
 written as
 
 .. math::
-  C = (M/11.0)^{-7},
+  C = (M/10.4)^{-8},
 
 where M is the i-band magnitude of the bright star. These detections are then
 spread uniformly in an annulus around the bright source of size

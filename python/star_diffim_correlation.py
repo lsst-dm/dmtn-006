@@ -164,7 +164,7 @@ def star_diffim_correlation(visit, ccdnum, butler, sql_session=None, debug=False
 
     forced_src_SNR = (diff_force_src['base_PsfFlux_flux'] - diff_force_src['template_base_PsfFlux_flux']) /  \
                     np.sqrt(diff_force_src['base_PsfFlux_fluxSigma']**2 + diff_force_src['template_base_PsfFlux_fluxSigma']**2)
-    sel_filtered_diasources, = np.where(np.abs(forced_src_SNR) > 5.0)
+    sel_filtered_diasources, = np.where((np.abs(forced_src_SNR) > 5.0) & (diff_src['classification_dipole'] == 0))
     filtered_SNRs = forced_src_SNR[sel_filtered_diasources]
 
     diasource_catalog = coord.SkyCoord(ra=diff_ra[sel_filtered_diasources], dec=diff_dec[sel_filtered_diasources],
