@@ -543,12 +543,47 @@ expedient proof of concept rather than a final design decision.
 Further work
 ------------
 
-- Testing on deeper exposures. Data are available for this (HITS survey), can be done soon.
+There are a number of ways in which this effort could be extended. Some of these are:
 
-- Building and differencing against coadded templates. The LSST stack supports this, also a near-term project.
+- Testing on deeper exposures. The data currently used are 60 second exposures
+  on a 4 meter telescope. Scaling by the collecting area, this is about 65% of
+  the depth of an LSST visit. While we expect that many CCD artifacts should not
+  be strongly dependent on the exposure depth, the number of astrophysical
+  sources in the images will be increased and consequently so will the
+  possibility of mis-subtracted sources appearing in the difference images.
 
-- Dependence on source density, Galactic latitude, sky background, etc.
+- Differencing against coadded templates. The tests in this work were done on
+  differences between single exposures. The baseline procedure for LSST will be
+  to build template images by coadding the exposures taken over some recent time
+  period. This reduces the noise and permits deeper detection of transient
+  sources. However, coadded templates may also retain the sum total of all
+  uncorrected artifacts from their constituent exposures, if these features are
+  not properly masked or otherwise accounted for.
 
+- Instrument rotation. Since the CTIO 4-meter telescope has a equatorial
+  mount, the detectors are always oriented in the same direction on the sky
+  between visits. Features like diffraction spikes and CCD charge bleeds thus
+  overlap each other in subsequent visits. In an alt-az mounted telescope like
+  LSST, images from visits at different hour angles will be rotated relative to
+  each other, and this may create a more complicate structure of image
+  artifacts. Testing the LSST pipeline's behavior in this situation requires
+  data from an alt-az telescope. Subaru is perhaps the best candidate for this,
+  given its high level of support in the LSST pipeline.
+
+- Dependence on source density, Galactic latitude, sky background, or other
+  observing parameters. Our results for this sample of images show considerable
+  variation in their properties, and we have not attempted to model the behavior
+  of individual exposures. Extending the set of sample images to test the image
+  differencing pipeline in a wide variety of conditions will provide valuable
+  information for both modeling the false positive behavior and for improving
+  the pipeline in general.
+..
+  Mayall collecting area: 11.4m^2, LSST 35m^2
+
+.. 
+  Several of
+  these are areas in which our testing procedure does not precisely match the
+  expected operation of the survey. 
 
 ..
   References
@@ -562,7 +597,8 @@ Further work
 Appendix A: Data used in this work
 ==================================
 
-XXX: Stack versions? Configuration settings.
+The data used were taken as part of a a NEO search on the CTIO 4-meter,
+Program 2013A-724, PI: L. Allen. All exposures were 60 seconds.
 
 
 .. table:: Decam visits used in this analysis.
