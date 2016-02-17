@@ -393,7 +393,7 @@ of :math:`30''` from the star.
     Example difference image around a 7th magnitude star. DIA source
     detections are marked with green x's. Green shaded regions are saturated
     and masked, while blue and cyan shading denotes the extent of a detected
-    "footprint". The green box is 1 arcminute on a side. A very bright CCD
+    "footprint". The green box is 2 arcminutes on a side. A very bright CCD
     bleed passes vertically through the star, but is effectively masked.
 
 
@@ -477,6 +477,8 @@ that this effect is properly mitigated.
 .. figure:: /_static/bleed_v197367_ccd08.png
     :name: bleed_detections
 
+    Example detection on the crosstalk image (right side) of a CCD charge
+    bleed (left side vertical line).
 
 Conclusions
 ===========
