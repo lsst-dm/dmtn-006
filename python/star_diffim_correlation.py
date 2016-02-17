@@ -200,17 +200,21 @@ def star_diffim_correlation(visit, ccdnum, butler, sql_session=None, debug=False
                                   frame='icrs')
 
 
+    bright_star_file = open("bright_star_file", mode="a")
     print(len(sources_x), len(diasource_catalog), len(diff_src))
     for ucac_coord,ucac_mag in zip(shifted_ucac, ok_ucac_mags):
         dists = ucac_coord.separation(diasource_catalog)
         sel, = np.where(dists < 1*u.arcmin)
         #print(ucac_mag, np.sort(dists[sel].to(u.arcsec)))
+        if ucac_mag < 9:
+            print("{},{},{},{},{}".format(ucac_coord.ra.deg, ucac_coord.dec.deg, ucac_mag, visit, ccdnum), file=bright_star_file)
 
         if sql_session:
             det_dists = [DetectionDist(dist=d.to(u.arcsec).value, SNR=SNR) for d,SNR in zip(dists[sel], filtered_SNRs[sel])]
             sql_entry = SourceDetectionCorrelation(visit=visit, ccdnum=ccdnum, source_mag=ucac_mag,
                                                    detection_dists=det_dists)
             sql_session.add(sql_entry)
+    bright_star_file.close()
 
 def run_debug(session):
     """This function saves example sources and diffim source distances to the database, then retrieves them.

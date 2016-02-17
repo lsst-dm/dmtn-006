@@ -269,21 +269,24 @@ estimate the uncertainty. It is clear that the pipeline reports that its
 detections are substantially more significant than our direct image estimates.
 This is entirely due to differences in the reported uncertainties. The ratio
 of the difference image uncertainty to the sum of the direct image
-uncertainties is between 0.8 and 0.85 for nearly all sources in this image, as
-seen in :numref:`forcephot_sigma_ratio`.
+uncertainties is between 0.8 and 0.85 for nearly all sources in this image.
 
 
 .. figure:: /_static/forcephot_hists.png
     :name: forcephot_hists
 
     Comparison of force photometry SNR versus the SNR of measurements on the
-    difference image.
+    difference image for all sources in one exposure (visit 197367). The blue
+    line shows the expected counts from random noise. When the noise is
+    properly accounted for by force photometry (left), the vast majority of
+    detections are consistent with what we would expect from noise.
 
-.. figure:: /_static/forcephot_sigma_ratio.png
-    :name: forcephot_sigma_ratio
+..
+  .. figure:: /_static/forcephot_sigma_ratio.png
+      :name: forcephot_sigma_ratio
 
-    Ratio of the reported difference image uncertainty to the expected
-    uncertainty for all sources on one CCD.
+      Ratio of the reported difference image uncertainty to the expected
+      uncertainty for all sources on one CCD.
 
 .. figure:: /_static/forcephot_sigmas_perccd.png
     :name: forcephot_sigmas_perccd
@@ -378,7 +381,21 @@ star produces only 8 extra DIA sources, and this number falls off rapidly for
 fainter stars. These detections all occur outside of 8 arcseconds, since this
 is the size of the "footprint" that the LSST pipeline assigns to these bright
 objects. The vast majority of excess detections occur in an annulus between
-this :math:`8''` limit and :math:`20''`.
+this :math:`8''` limit and :math:`20''`. An example difference image with a
+bright star is shown in :numref:`brightstar_postagestamp`. Excess detections
+are found outside the detection footprint of the bright star, causing the
+inner hole in :numref:`correlation_cumulative`, but generally inside
+of :math:`30''` from the star.
+
+.. figure:: /_static/brightstar_v197367_ccd08.png
+    :name: brightstar_postagestamp
+
+    Example difference image around a 7th magnitude star. DIA source
+    detections are marked with green x's. Green shaded regions are saturated
+    and masked, while blue and cyan shading denotes the extent of a detected
+    "footprint". The green box is 1 arcminute on a side. A very bright CCD
+    bleed passes vertically through the star, but is effectively masked.
+
 
 :numref:`brightstar_dia_snr` shows the distribution of SNRs for these excess
 detections around bright stars as compared to the "normal" detections found
@@ -442,6 +459,25 @@ performance of moving object detection we believe this to be sufficient.
     Simple power law model for the number of excess detections inside 30
     arcseconds from a bright star.
 
+Uncorrected Artifacts
+---------------------
+
+Visual inspection of exposures have also lead to the discovery of correlated
+sets of detections, most notably in the crosstalk image of a bright star bleed
+trail shown in :numref:`bleed_detections`. In this case the bright star on the
+left creates a vertical line of saturated pixels, and when the image is read
+out, the amplifier reading the right side of the image (without the bleed) is
+affected by the strong signal on the left side amplifier. While we show this
+for completeness, in this example dataset the crosstalk corrections that
+should remove this effect was performed by the Decam Community Pipeline,
+rather than the LSST software stack. A future extension of this work will be
+to enable the LSST pipeline's crosstalk corrections on Decam images and ensure
+that this effect is properly mitigated.
+
+.. figure:: /_static/bleed_v197367_ccd08.png
+    :name: bleed_detections
+
+
 Conclusions
 ===========
 
@@ -502,7 +538,8 @@ expedient proof of concept rather than a final design decision.
   flux from the object in the template, and thus no reason to add the template
   exposure's noise.
 
-Further work:
+Further work
+------------
 
 - Testing on deeper exposures. Data are available for this (HITS survey), can be done soon.
 
