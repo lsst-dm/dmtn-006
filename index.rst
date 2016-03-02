@@ -189,7 +189,7 @@ This expectation is described in Kaiser (2004) and Becker et al. (2013). For
 the Decam images with seeing of :math:`\sigma_g = 1.8` pixels and 2k by 4k
 pixel sensor, we expect 1.5 noise detections per sensor  at :math:`5\sigma` or
 33 detections per square degree (twice that if counting both positive and
-negative detections). The current rate we measure is 100 times this. This
+negative detections). The raw rate we measure is 100 times this. This
 suggests that either some substantial quantity of artifacts (in the original
 images or introduced by the LSST software) are present, or that the pipeline's
 estimate of the threshold for detection is incorrect.
@@ -310,40 +310,48 @@ standard processing. The reported measurement would then be the difference of
 the two PSF fluxes from the direct images, rather than from the difference
 image. This is a completely equivalent measurement.
 
-.. table:: Source counts for visit 197367
+.. table:: Source counts for visit 197367, and mean of all visits.
   :name: forcephot_table
 
-  +----------------------------------------+------------------------------+--------------------------+
-  | Source Type                            | Counts per Decam focal plane | Counts per square degree |
-  +========================================+==============================+==========================+
-  | Positive Sources                       | 9062                         | 3572                     |
-  +----------------------------------------+------------------------------+--------------------------+
-  | Negative Sources                       | 12089                        | 4763                     |
-  +----------------------------------------+------------------------------+--------------------------+
-  | Positive after force-photometry filter | 1,220                        | 480                      |
-  +----------------------------------------+------------------------------+--------------------------+
-  | Negative after force-photometry filter | 1,408                        | 555                      |
-  +----------------------------------------+------------------------------+--------------------------+
-  | Dipoles (not included above)           | 2,853                        | 1,124                    |
-  +----------------------------------------+------------------------------+--------------------------+
+  +----------------------------------------+---------------------+-------------------+
+  | Source Type                            | Visit 197367 counts | All visits, counts|
+  |                                        | per sq. deg         | per sq. deg       |
+  +========================================+=====================+===================+
+  | Raw Positive Sources                   | 3,572               | 19,475            |
+  +----------------------------------------+---------------------+-------------------+
+  | Raw Negative Sources                   | 4,763               | 23,018            |
+  +----------------------------------------+---------------------+-------------------+
+  | Dipoles (not included below)           | 1,124               | 1,609             |
+  +----------------------------------------+---------------------+-------------------+
+  | Positive after :math:`5\sigma` cut     | 480                 | 1,022             |
+  +----------------------------------------+---------------------+-------------------+
+  | Negative after :math:`5\sigma` cut     | 555                 | 600               |
+  +----------------------------------------+---------------------+-------------------+
+  | Positive sources excluding "variables" | 237                 | 344               |
+  +----------------------------------------+---------------------+-------------------+
+
 
 The results of this process are quantified for a single field in
 :numref:`forcephot_table`. The number of detections is reduced by a factor of
 8-10, simply by eliminating all detections that could not possibly be
-:math:`5\sigma`. The resulting detections are very clean.
+:math:`5\sigma`. We also compute the density of detections after excluding
+"variables", which we use as a broadly-encompassing term for sources that
+appear at :math:`>15\sigma` in both template and science images. These are
+unlikely to be asteroids, although this could potentially be excluding
+asteroids which appear on top of other sources.
 
 .. figure:: /_static/postfiltered_counts.png
     :name: postfiltered_counts
 
-    Result of forced photometry filtering. The exposure numbering and shading
-    is the same as :numref:`unfiltered_counts`. While some fields apparently
-    developed a bias between negative and positive counts, this is potentially
-    a result of the template selection process.
+    Result of forced photometry :math:`5\sigma` cut. The exposure numbering
+    and shading is the same as :numref:`unfiltered_counts`. While some fields
+    apparently developed a bias between negative and positive counts, this is
+    potentially a result of the template selection process.
 
 .. figure:: /_static/postfiltered_ratios.png
     :name: postfiltered_ratios
 
-    Ratio of the filtered counts to the raw detection counts.
+    Ratio of the :math:`5\sigma` counts to the raw detection counts.
 
 Detections near Bright Stars
 =============================
@@ -483,24 +491,14 @@ that this effect is properly mitigated.
 Conclusions
 ===========
 
-- Accurate tracking of the variance plane is critical for controlling the false
-  positive rate.
-
-- Convolution inherently makes it challenging to properly track the variance.
-
-- We can circumvent this problem by setting a permissive significance threshold
-  for detection in the difference image, but then filtering the results with
-  force photometry on the original input images. This filtering process produces
-  a functionally identical measurement, but with well-defined noise properties.
-
-
 The primary result from this work is that the LSST pipeline is capable of
-producing a clean sample of difference image detections as long as the image
-variance is carefully tracked. In the case of the test data we tried, this
-required adjusting the variance measures supplied by an external pipeline to
-match the observed scatter in pixel variance. Similar checks will be necessary
-when using variance estimates generated by the LSST pipeline, but overall this
-is relatively simple.
+producing a clean sample of difference image detections, at roughly the
+200-400 per square degree level, as long as the image variance is carefully
+tracked. In the case of the test data we tried, this required adjusting the
+variance measures supplied by an external pipeline to match the observed
+scatter in pixel variance. Similar checks will be necessary when using
+variance estimates generated by the LSST pipeline, but overall this is
+relatively simple.
 
 The more complicated challenge is tracking the image variance after
 convolution, since that process transforms the noise which is purely per-pixel
@@ -580,11 +578,6 @@ There are a number of ways in which this effort could be extended. Some of these
 ..
   Mayall collecting area: 11.4m^2, LSST 35m^2
 
-.. 
-  Several of
-  these are areas in which our testing procedure does not precisely match the
-  expected operation of the survey. 
-
 ..
   References
   ==========
@@ -600,29 +593,31 @@ Appendix A: Data used in this work
 The data used were taken as part of a a NEO search on the CTIO 4-meter,
 Program 2013A-724, PI: L. Allen. All exposures were 60 seconds.
 
-
 .. table:: Decam visits used in this analysis.
 
-  ======  ==============   =========   ============   ============
-   Visit  Template Visit   CCDs        Galactic Lat   Galactic Lon
-                           processed
-  ======  ==============   =========   ============   ============
-  197367          197371          59        56.3311       297.6941
-  197375          197371          59        56.3355       298.0934
-  197379          197371          59        56.3461       297.6202
-  197388          197384          59        46.0518       308.6413
-  197392          197384          59        46.0973       308.8498
-  197400          197408          59        43.9119       312.3330
-  197404          197408          59        43.9128       312.3235
-  197412          197408          54        43.8827       312.2617
-  197802          197790           7       -22.8796       211.1369
-  198380          197790           7       -22.9299       211.1618
-  198384          197790           7       -22.8802       211.1440
-  198668          197662          47       -34.6799        39.8085
-  199009          197662          37       -34.5272        39.9427
-  199021          197662          37       -34.5853        40.0062
-  199033          197662          23       -34.7855        40.1130
-  ======  ==============   =========   ============   ============
-
+  ======  ==============  ===================  =========   ============   ============
+   Visit  Template              Time Observed  CCDs        Galactic Lat   Galactic Lon
+  ======  ==============  ===================  =========   ============   ============
+  197371                  2013-04-16 00:18:45
+  197367          197371  2013-04-16 00:12:53         59        56.3311       297.6941
+  197375          197371  2013-04-16 00:24:42         59        56.3355       298.0934
+  197379          197371  2013-04-16 00:30:35         59        56.3461       297.6202
+  197384                  2013-04-16 00:40:02
+  197388          197384  2013-04-16 00:45:58         59        46.0518       308.6413
+  197392          197384  2013-04-16 00:51:58         59        46.0973       308.8498
+  197408                  2013-04-16 01:15:18
+  197400          197408  2013-04-16 01:03:24         59        43.9119       312.3330
+  197404          197408  2013-04-16 01:09:21         59        43.9128       312.3235
+  197412          197408  2013-04-16 01:21:18         54        43.8827       312.2617
+  197790                  2013-04-16 23:15:06
+  197802          197790  2013-04-16 23:32:55          7       -22.8796       211.1369
+  198380          197790  2013-04-17 23:23:11          7       -22.9299       211.1618
+  198384          197790  2013-04-17 23:29:07          7       -22.8802       211.1440
+  197662                  2013-04-16 10:03:03
+  198668          197662  2013-04-18 08:37:43         47       -34.6799        39.8085
+  199009          197662  2013-04-19 09:32:02         37       -34.5272        39.9427
+  199021          197662  2013-04-19 09:50:28         37       -34.5853        40.0062
+  199033          197662  2013-04-19 10:08:32         23       -34.7855        40.1130
+  ======  ==============  ===================  =========   ============   ============
 
 
