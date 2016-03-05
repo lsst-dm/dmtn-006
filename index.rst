@@ -210,7 +210,7 @@ this for a single field is shown in :numref:`forcephot_sci_template_v197367`.
 
 Because we are differencing two single exposures rather than an exposure
 against a coadd, a source appearing in the science exposure will need to have
-a signal to nose ratio of :math:`5\sqrt{2}` to be detected as a :math:`5
+a signal to noise ratio of :math:`5\sqrt{2}` to be detected as a :math:`5
 \sigma` source in the difference image. The force photometry diagrams thus
 show this threshold as the two diagonal lines, for positive and negative sources.
 
@@ -333,12 +333,13 @@ image. This is a completely equivalent measurement.
 
 The results of this process are quantified for a single field in
 :numref:`forcephot_table`. The number of detections is reduced by a factor of
-8-10, simply by eliminating all detections that could not possibly be
+:math:`\sim 10`, simply by eliminating all detections that could not possibly be
 :math:`5\sigma`. We also compute the density of detections after excluding
 "variables", which we use as a broadly-encompassing term for sources that
-appear at :math:`>15\sigma` in both template and science images. These are
-unlikely to be asteroids, although this could potentially be excluding
-asteroids which appear on top of other sources.
+appear at :math:`>15\sigma` in both template and science images (this cut-off
+is arbitrary, but using a limit of  of :math:`>10\sigma` for example makes
+very little difference). These are unlikely to be asteroids, although this
+could potentially be excluding asteroids which appear on top of other sources.
 
 .. figure:: /_static/postfiltered_counts.png
     :name: postfiltered_counts
@@ -422,7 +423,7 @@ were detecting diffraction spikes or other bright optical artifacts.
     around bright stars and the sources that randomly cover the field.
 
 Model of Excess Detections
---------------------------
+==========================
 
 A simple model for these excess detections is shown in
 :numref:`correlation_model`. In this we assume a power law for the total

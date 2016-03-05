@@ -18,13 +18,16 @@ doc_title: 'False Positive Rates in the LSST Image Differencing Pipeline'
 # Author names, ordered as a list. Each author name should be formatted as 'First Last'
 authors:
     - 'Colin Slater'
+    - 'Mario Jurić'
+    - 'Željko Ivezić'
+    - 'Lynne Jones'
 
 # Current document version
-last_revised: '2016-03-02'
+last_revised: '2016-03-04'
 
 # Version. Use Semvar, e.g., 1.0, including .dev, as necessary
 # This version string should correspond to the git tag when the document is published on Zenodo
-version: '0.1'
+version: '1.0'
 
 # Digital Object Identifier (DOI). Uncomment if available.
 # Keep this DOI updated as new releases are pushed to Zenodo
