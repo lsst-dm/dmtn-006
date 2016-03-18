@@ -23,7 +23,7 @@ authors:
     - 'Lynne Jones'
 
 # Current document version
-last_revised: '2016-03-04'
+last_revised: '2016-03-18'
 
 # Version. Use Semvar, e.g., 1.0, including .dev, as necessary
 # This version string should correspond to the git tag when the document is published on Zenodo
@@ -47,7 +47,7 @@ description: 'An analysis of the false positives in Decam imaging data processed
 #           You can have multiple paragraphs too.
 
 # URL where this document is published by Read the Docs. e.g. http://sqr-001.lsst.codes
-url: 'http://dmtn-999.lsst.io'
+url: 'http://dmtn-006.lsst.io'
 
 # LSST Docushare URL, if authoritative versions of this are are stored there.
 # Leave as an empty string or comment out this key if there is no Docushare URL.

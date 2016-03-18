@@ -174,8 +174,10 @@ Noise in Difference Images
 
 Even after rescaling the variance planes on the input images,
 the number of detections per square degree are several orders of magnitude
-greater than expected from Gaussian noise. For an image with PSF width
-:math:`\sigma_g`, the density of detections above a threshold :math:`\nu` is
+greater than expected from Gaussian noise. For an image with a Gaussian PSF of width
+:math:`\sigma_g` in pixels (note this is the Gaussian :math:`\sigma`, not the
+full width at half max), the density of detections above a threshold :math:`\nu`
+is
 
 .. math::
   n(> \nu) = \frac{1}{2^{5/2} \pi^{3/2}} \nu e^{-\nu^2/2},
@@ -183,7 +185,7 @@ greater than expected from Gaussian noise. For an image with PSF width
 where the total number per image is
 
 .. math::
-  N_{\rm total}(> \nu) = n(> \nu) / \sigma_g \times \rm{nrows} \times \rm{ncol}.
+  N_{\rm total}(> \nu) = n(> \nu) / \sigma_g^2 \times \rm{nrows} \times \rm{ncol}.
 
 This expectation is described in Kaiser (2004) and Becker et al. (2013). For
 the Decam images with seeing of :math:`\sigma_g = 1.8` pixels and 2k by 4k
@@ -620,5 +622,3 @@ Program 2013A-724, PI: L. Allen. All exposures were 60 seconds.
   199021          197662  2013-04-19 09:50:28         37       -34.5853        40.0062
   199033          197662  2013-04-19 10:08:32         23       -34.7855        40.1130
   ======  ==============  ===================  =========   ============   ============
-
-
