@@ -21,6 +21,7 @@ In addition to the technical note text, several components of the code used for 
 * ``notebooks/forced_photometry.ipynb`` - This notebook performs the analysis of the force photometry output.
 * ``notebooks/forced_phot_sql.ipynb`` - This version of the analysis is better equipped for working on all of the fields at once.
 * ``notebooks/noise_analysis.ipynb`` - Analysis of the per-pixel noise estimates in the direct (science and template) Decam images.
+* ``notebooks/masked_fraction.ipynb`` - Estimate of the area lost by excluding small regions around bright stars.
 
 ..
   Uncomment this section and modify the DOI strings to include a Zenodo DOI badge in the README
