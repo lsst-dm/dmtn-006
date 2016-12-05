@@ -1,3 +1,10 @@
+.. image:: https://img.shields.io/badge/dmtn--006-lsst.io-brightgreen.svg
+   :target: https://dmtn-006.lsst.io
+   :alt: Technote website
+.. image:: https://img.shields.io/travis/lsst-dm/dmtn-006/master.svg?maxAge=2592000
+   :target: https://travis-ci.org/lsst-dm/dmtn-006
+   :alt: Travis build status
+
 ###########################################################################
 DMTN-006 False Positive Rates in the LSST Image Differencing Pipeline
 ###########################################################################
@@ -5,7 +12,7 @@ DMTN-006 False Positive Rates in the LSST Image Differencing Pipeline
 An analysis of the false positives in Decam imaging data processed by the LSST pipeline.
 
 View this technote at http://dmtn-006.lsst.io or see a preview of the
-current version in `this repo`_
+current version in `this repo`_.
 
 .. _this repo: ./index.rst
 
