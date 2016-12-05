@@ -578,6 +578,7 @@ There are a number of ways in which this effort could be extended. Some of these
   differencing pipeline in a wide variety of conditions will provide valuable
   information for both modeling the false positive behavior and for improving
   the pipeline in general.
+
 ..
   Mayall collecting area: 11.4m^2, LSST 35m^2
 
