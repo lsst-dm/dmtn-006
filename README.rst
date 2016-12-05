@@ -4,6 +4,9 @@
 .. image:: https://img.shields.io/travis/lsst-dm/dmtn-006/master.svg?maxAge=2592000
    :target: https://travis-ci.org/lsst-dm/dmtn-006
    :alt: Travis build status
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.192828.svg
+   :target: http://dx.doi.org/10.5281/zenodo.192828
+   :alt: doi:10.5281/zenodo.192828
 
 ###########################################################################
 DMTN-006 False Positive Rates in the LSST Image Differencing Pipeline

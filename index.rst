@@ -1,6 +1,8 @@
 
 :tocdepth: 1
 
+**DOI:** `10.5281/zenodo.192828 <http://dx.doi.org/10.5281/zenodo.192828>`_
+
 Introduction
 ============
 
