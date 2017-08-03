@@ -1,6 +1,4 @@
-Sphinx>=1.4.6
-documenteer>=0.1.9
-lsst-dd-rtd-theme
+documenteer[technote]>=0.2.1,<0.3
 numpy>=1.10.4
 astropy>=1.0.4
 matplotlib>=1.5.1
